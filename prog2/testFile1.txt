@@ -1,0 +1,8 @@
+extern func test(bool) void;
+
+package helloParser {
+	// comment test....35531313554534
+	func main(a int) int {
+	}
+}
+

@@ -1,0 +1,6 @@
+extern func test(bool) void;
+
+package helloParser {
+	// error code with no semicolon ";"
+	var a int = 10
+}
