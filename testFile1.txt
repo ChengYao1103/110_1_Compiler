@@ -2,7 +2,12 @@ extern func test(bool) void;
 
 package helloParser {
 	// comment test....35531313554534
+	var a int = 10;
+	var b int = 20;
+	var c bool = true;
+	print;
 	func main(a int) int {
+		var c int;
 	}
 }
 

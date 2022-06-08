@@ -3,7 +3,6 @@
 	#include <stdlib.h>
 	#include <string.h>
 	#include "y.tab.h"
-	extern int yylineno;
 	int line = 1;
 	extern void yyset_lineno(int lineno);
 	// track line number %option yylineno
@@ -13,15 +12,17 @@
 
 %%
 
+print										{ return T_PRINT; }
 func										{ return T_FUNC; }
 return										{ return T_RETURN; }
 while										{ return T_WHILE; }
-void										{ return T_VOID; }
 var											{ return T_VAR; }
-bool										{ return T_BOOLTYPE; }
-int											{ return T_INTTYPE; }
-string										{ return T_STRINGTYPE; }
-true										{ return T_TRUE; }
+void										{ yylval.yy_int = T_VOID;return T_VOID; }
+bool										{ yylval.yy_int = T_BOOLTYPE;return T_BOOLTYPE; }
+int											{ yylval.yy_int = T_INTTYPE;return T_INTTYPE; }
+string										{ yylval.yy_int = T_STRINGTYPE;return T_STRINGTYPE; }
+true										{ yylval.yy_int = T_TRUE;return T_TRUE; }
+false										{ yylval.yy_int = T_FALSE;return T_FALSE; }
 null										{ return T_NULL; }
 if											{ return T_IF; }
 extern										{ return T_EXTERN; }
@@ -31,7 +32,6 @@ break										{ return T_BREAK; }
 continue									{ return T_CONTINUE; }
 , 											{ return T_COMMA; }
 else										{ return T_ELSE; }
-false										{ return T_FALSE; }
 ==											{ return T_EQ;  }
 >=											{ return T_GEQ; }
 >											{ return T_GT;  }
@@ -50,14 +50,14 @@ false										{ return T_FALSE; }
 \|\|										{ return T_OR; }
 ;											{ return T_SEMICOLON; }
 \"([^\n"\\]|\\(a|b|t|n|v|f|r|\\|\'|\"))*\"	{ return T_STRINGCONSTANT; }
-[0-9]+(\.[0-9]+)?							{ yylval.intVal = atoi(yytext);return T_INTCONSTANT; }
+[0-9]+(\.[0-9]+)?							{ yylval.yy_str = strdup(yytext);return T_INTCONSTANT; }
 0[xX][0-9A-Fa-f]+							{ return T_HEXCONSTANT; }
-\'([^\n'\\]|\\(a|b|t|n|v|f|r|\\|\'|\"))\'	{ yylval.stringVal = strdup(yytext);return T_CHARCONSTANT; }
+\'([^\n'\\]|\\(a|b|t|n|v|f|r|\\|\'|\"))\'	{ yylval.yy_str = strdup(yytext);return T_CHARCONSTANT; }
 \{											{ return T_LCB; }
 \}											{ return T_RCB; }
 \(											{ return T_LPAREN; }
 \)											{ return T_RPAREN; }
-[a-zA-Z\_][a-zA-Z\_0-9]*					{ yylval.stringVal = strdup(yytext);return T_ID; }
+[a-zA-Z\_][a-zA-Z\_0-9]*					{ yylval.yy_str = strdup(yytext);return T_ID; }
 "//".*"\n"									{ line++;yyset_lineno(line); }	// if return something will occur error
 \n											{ line++;yyset_lineno(line);}
 [\t\r\a\v\b ]+								{  }	

@@ -49,18 +49,18 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    T_VOID = 258,
-    T_VAR = 259,
-    T_INTTYPE = 260,
-    T_BOOLTYPE = 261,
-    T_STRINGTYPE = 262,
-    T_TRUE = 263,
-    T_FALSE = 264,
-    T_NULL = 265,
-    T_STRINGCONSTANT = 266,
-    T_INTCONSTANT = 267,
-    T_CHARCONSTANT = 268,
-    T_HEXCONSTANT = 269,
+    T_VAR = 258,
+    T_TRUE = 259,
+    T_FALSE = 260,
+    T_NULL = 261,
+    T_STRINGCONSTANT = 262,
+    T_INTCONSTANT = 263,
+    T_CHARCONSTANT = 264,
+    T_HEXCONSTANT = 265,
+    T_VOID = 266,
+    T_INTTYPE = 267,
+    T_BOOLTYPE = 268,
+    T_STRINGTYPE = 269,
     T_EQ = 270,
     T_NEQ = 271,
     T_GEQ = 272,
@@ -95,27 +95,28 @@ extern int yydebug;
     T_DOT = 301,
     T_LEFTSHIFT = 302,
     T_RIGHTSHIFT = 303,
-    T_PACKAGE = 304,
-    T_EXTERN = 305,
-    T_COMMENT = 306,
-    T_ID = 307,
+    T_ID = 304,
+    T_PACKAGE = 305,
+    T_EXTERN = 306,
+    T_COMMENT = 307,
     T_WHITESPACE = 308,
-    T_WHITESPACE_N = 309
+    T_WHITESPACE_N = 309,
+    T_PRINT = 310
   };
 #endif
 /* Tokens.  */
-#define T_VOID 258
-#define T_VAR 259
-#define T_INTTYPE 260
-#define T_BOOLTYPE 261
-#define T_STRINGTYPE 262
-#define T_TRUE 263
-#define T_FALSE 264
-#define T_NULL 265
-#define T_STRINGCONSTANT 266
-#define T_INTCONSTANT 267
-#define T_CHARCONSTANT 268
-#define T_HEXCONSTANT 269
+#define T_VAR 258
+#define T_TRUE 259
+#define T_FALSE 260
+#define T_NULL 261
+#define T_STRINGCONSTANT 262
+#define T_INTCONSTANT 263
+#define T_CHARCONSTANT 264
+#define T_HEXCONSTANT 265
+#define T_VOID 266
+#define T_INTTYPE 267
+#define T_BOOLTYPE 268
+#define T_STRINGTYPE 269
 #define T_EQ 270
 #define T_NEQ 271
 #define T_GEQ 272
@@ -150,23 +151,24 @@ extern int yydebug;
 #define T_DOT 301
 #define T_LEFTSHIFT 302
 #define T_RIGHTSHIFT 303
-#define T_PACKAGE 304
-#define T_EXTERN 305
-#define T_COMMENT 306
-#define T_ID 307
+#define T_ID 304
+#define T_PACKAGE 305
+#define T_EXTERN 306
+#define T_COMMENT 307
 #define T_WHITESPACE 308
 #define T_WHITESPACE_N 309
+#define T_PRINT 310
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 18 "yacc.y"
+#line 32 "yacc.y"
 
-	int intVal;
-	char *stringVal;
+	char *yy_str;
+	int yy_int;
 
-#line 170 "y.tab.h"
+#line 172 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
