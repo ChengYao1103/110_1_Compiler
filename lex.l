@@ -3,7 +3,13 @@
 	#include <stdlib.h>
 	#include <string.h>
 	#include "y.tab.h"
+	extern int yylineno;
+	int line = 1;
+	extern void yyset_lineno(int lineno);
+	// track line number %option yylineno
 %}
+
+%option yylineno
 
 %%
 
@@ -44,15 +50,16 @@ false										{ return T_FALSE; }
 \|\|										{ return T_OR; }
 ;											{ return T_SEMICOLON; }
 \"([^\n"\\]|\\(a|b|t|n|v|f|r|\\|\'|\"))*\"	{ return T_STRINGCONSTANT; }
-([0-9]+(\.[0-9]+)?)|(0[xX][0-9A-Fa-f]+)		{ return T_INTCONSTANT; }
-\'([^\n'\\]|\\(a|b|t|n|v|f|r|\\|\'|\"))\'	{ return T_CHARCONSTANT; }
+[0-9]+(\.[0-9]+)?							{ yylval.intVal = atoi(yytext);return T_INTCONSTANT; }
+0[xX][0-9A-Fa-f]+							{ return T_HEXCONSTANT; }
+\'([^\n'\\]|\\(a|b|t|n|v|f|r|\\|\'|\"))\'	{ yylval.stringVal = strdup(yytext);return T_CHARCONSTANT; }
 \{											{ return T_LCB; }
 \}											{ return T_RCB; }
 \(											{ return T_LPAREN; }
 \)											{ return T_RPAREN; }
-[a-zA-Z\_][a-zA-Z\_0-9]*					{ return T_ID; }
-"//".*"\n"									{  }	// if return something will occur error
-\n+[\t\r\a\v\b ]*							{  }	
+[a-zA-Z\_][a-zA-Z\_0-9]*					{ yylval.stringVal = strdup(yytext);return T_ID; }
+"//".*"\n"									{ line++;yyset_lineno(line); }	// if return something will occur error
+\n											{ line++;yyset_lineno(line);}
 [\t\r\a\v\b ]+								{  }	
 &&											{ return T_AND; }
 =											{ return T_ASSIGN; }

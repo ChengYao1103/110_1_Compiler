@@ -60,46 +60,47 @@ extern int yydebug;
     T_STRINGCONSTANT = 266,
     T_INTCONSTANT = 267,
     T_CHARCONSTANT = 268,
-    T_EQ = 269,
-    T_NEQ = 270,
-    T_GEQ = 271,
-    T_GT = 272,
-    T_LEQ = 273,
-    T_LT = 274,
-    T_PLUS = 275,
-    T_MINUS = 276,
-    T_MULT = 277,
-    T_DIV = 278,
-    T_MOD = 279,
-    T_NOT = 280,
-    T_OR = 281,
-    T_AND = 282,
-    T_ASSIGN = 283,
-    T_FUNC = 284,
-    T_RETURN = 285,
-    T_WHILE = 286,
-    T_IF = 287,
-    T_ELSE = 288,
-    T_FOR = 289,
-    T_BREAK = 290,
-    T_CONTINUE = 291,
-    T_COMMA = 292,
-    T_LSB = 293,
-    T_RSB = 294,
-    T_SEMICOLON = 295,
-    T_LCB = 296,
-    T_RCB = 297,
-    T_LPAREN = 298,
-    T_RPAREN = 299,
-    T_DOT = 300,
-    T_LEFTSHIFT = 301,
-    T_RIGHTSHIFT = 302,
-    T_PACKAGE = 303,
-    T_EXTERN = 304,
-    T_COMMENT = 305,
-    T_ID = 306,
-    T_WHITESPACE = 307,
-    T_WHITESPACE_N = 308
+    T_HEXCONSTANT = 269,
+    T_EQ = 270,
+    T_NEQ = 271,
+    T_GEQ = 272,
+    T_GT = 273,
+    T_LEQ = 274,
+    T_LT = 275,
+    T_PLUS = 276,
+    T_MINUS = 277,
+    T_MULT = 278,
+    T_DIV = 279,
+    T_MOD = 280,
+    T_NOT = 281,
+    T_OR = 282,
+    T_AND = 283,
+    T_ASSIGN = 284,
+    T_FUNC = 285,
+    T_RETURN = 286,
+    T_WHILE = 287,
+    T_IF = 288,
+    T_ELSE = 289,
+    T_FOR = 290,
+    T_BREAK = 291,
+    T_CONTINUE = 292,
+    T_COMMA = 293,
+    T_LSB = 294,
+    T_RSB = 295,
+    T_SEMICOLON = 296,
+    T_LCB = 297,
+    T_RCB = 298,
+    T_LPAREN = 299,
+    T_RPAREN = 300,
+    T_DOT = 301,
+    T_LEFTSHIFT = 302,
+    T_RIGHTSHIFT = 303,
+    T_PACKAGE = 304,
+    T_EXTERN = 305,
+    T_COMMENT = 306,
+    T_ID = 307,
+    T_WHITESPACE = 308,
+    T_WHITESPACE_N = 309
   };
 #endif
 /* Tokens.  */
@@ -114,50 +115,61 @@ extern int yydebug;
 #define T_STRINGCONSTANT 266
 #define T_INTCONSTANT 267
 #define T_CHARCONSTANT 268
-#define T_EQ 269
-#define T_NEQ 270
-#define T_GEQ 271
-#define T_GT 272
-#define T_LEQ 273
-#define T_LT 274
-#define T_PLUS 275
-#define T_MINUS 276
-#define T_MULT 277
-#define T_DIV 278
-#define T_MOD 279
-#define T_NOT 280
-#define T_OR 281
-#define T_AND 282
-#define T_ASSIGN 283
-#define T_FUNC 284
-#define T_RETURN 285
-#define T_WHILE 286
-#define T_IF 287
-#define T_ELSE 288
-#define T_FOR 289
-#define T_BREAK 290
-#define T_CONTINUE 291
-#define T_COMMA 292
-#define T_LSB 293
-#define T_RSB 294
-#define T_SEMICOLON 295
-#define T_LCB 296
-#define T_RCB 297
-#define T_LPAREN 298
-#define T_RPAREN 299
-#define T_DOT 300
-#define T_LEFTSHIFT 301
-#define T_RIGHTSHIFT 302
-#define T_PACKAGE 303
-#define T_EXTERN 304
-#define T_COMMENT 305
-#define T_ID 306
-#define T_WHITESPACE 307
-#define T_WHITESPACE_N 308
+#define T_HEXCONSTANT 269
+#define T_EQ 270
+#define T_NEQ 271
+#define T_GEQ 272
+#define T_GT 273
+#define T_LEQ 274
+#define T_LT 275
+#define T_PLUS 276
+#define T_MINUS 277
+#define T_MULT 278
+#define T_DIV 279
+#define T_MOD 280
+#define T_NOT 281
+#define T_OR 282
+#define T_AND 283
+#define T_ASSIGN 284
+#define T_FUNC 285
+#define T_RETURN 286
+#define T_WHILE 287
+#define T_IF 288
+#define T_ELSE 289
+#define T_FOR 290
+#define T_BREAK 291
+#define T_CONTINUE 292
+#define T_COMMA 293
+#define T_LSB 294
+#define T_RSB 295
+#define T_SEMICOLON 296
+#define T_LCB 297
+#define T_RCB 298
+#define T_LPAREN 299
+#define T_RPAREN 300
+#define T_DOT 301
+#define T_LEFTSHIFT 302
+#define T_RIGHTSHIFT 303
+#define T_PACKAGE 304
+#define T_EXTERN 305
+#define T_COMMENT 306
+#define T_ID 307
+#define T_WHITESPACE 308
+#define T_WHITESPACE_N 309
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+union YYSTYPE
+{
+#line 18 "yacc.y"
+
+	int intVal;
+	char *stringVal;
+
+#line 170 "y.tab.h"
+
+};
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif

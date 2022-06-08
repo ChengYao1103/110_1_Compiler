@@ -8,11 +8,27 @@
     void yyerror(const char *s);
     int yylex();
     int yywrap();
+    extern int yyget_lineno();
+    extern int yylineno;
+    extern char* yytext;
     bool is_error = false;
 %}
 
+// struct
+%union{
+	int intVal;
+	char *stringVal;
+}
+%type <intVal> T_INTCONSTANT;
+%type <stringVal> T_CHARCONSTANT;
+%type <stringVal> T_STRINGCONSTANT;
+%type <intVal> T_FALSE;
+%type <intVal> T_TRUE;
+%type <stringVal> T_ID;
+
+
 // type
-%token T_VOID T_VAR T_INTTYPE T_BOOLTYPE T_STRINGTYPE T_TRUE T_FALSE T_NULL T_STRINGCONSTANT T_INTCONSTANT T_CHARCONSTANT
+%token T_VOID T_VAR T_INTTYPE T_BOOLTYPE T_STRINGTYPE T_TRUE T_FALSE T_NULL T_STRINGCONSTANT T_INTCONSTANT T_CHARCONSTANT T_HEXCONSTANT
 // compare & operator
 %token T_EQ T_NEQ T_GEQ T_GT T_LEQ T_LT T_PLUS T_MINUS T_MULT T_DIV T_MOD T_NOT T_OR T_AND T_ASSIGN 
 // function
@@ -52,7 +68,7 @@ fieldDecls: fieldDecls fieldDecl
 ;
 fieldDecl: T_VAR ids type T_SEMICOLON
 	| T_VAR ids arrayType T_SEMICOLON
-	| T_VAR T_ID type T_ASSIGN constant T_SEMICOLON
+	| T_VAR T_ID type T_ASSIGN constant T_SEMICOLON	{printf("id:%s value: %d\n", $2, $<intVal>5);}
 ;
 
 // method
@@ -155,11 +171,11 @@ methodType: T_VOID
 	| type
 ;
 arrayType: T_LSB T_INTCONSTANT T_RSB type ;
-constant: T_INTCONSTANT
-	| T_CHARCONSTANT
-	| T_STRINGCONSTANT
-	| T_TRUE
-	| T_FALSE
+constant: T_INTCONSTANT	{$<intVal>$ = $1;}
+	| T_CHARCONSTANT	{$<stringVal>$ = $1;}
+	| T_STRINGCONSTANT	{$<stringVal>$ = $1;}
+	| T_TRUE			{$<intVal>$ = 1;}
+	| T_FALSE			{$<intVal>$ = 0;}
 ;
 
 
@@ -175,5 +191,6 @@ int main(void) {
 
 void yyerror(const char* msg) {
 	is_error = true;
-    fprintf(stderr, "%s\n", msg);
+    fprintf(stderr, "%s at line %d:\n", msg, yyget_lineno());
+    fprintf(stderr, "%s\n", yytext);
 }
