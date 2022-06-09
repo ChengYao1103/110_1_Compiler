@@ -13,6 +13,7 @@
     extern int yylineno;
     bool is_error = false;
     
+    // symbol table
     typedef struct symbol{
 		int type;
 		char name[100];
@@ -21,11 +22,15 @@
 		char stringValue[MAXSIZE];
 		int passing; // value or reference
 	}symbol;
+	
 	int symbol_count = 0;
 	symbol symbols[MAXSIZE];
 	int searchSymbol(char *name);
 	void createSymbol(char *name, int type, char* value);
 	void printSymbols();
+	
+	// function
+	void binaryCompute(char *a_name, int operator, char *b_name);
 
 %}
 
@@ -34,7 +39,7 @@
 	char *yy_str;
 	int yy_int;
 }
-%type <yy_int> type;
+%type <yy_int> type binaryOperators mathOperator compareOperator;
 %type <yy_str> constant;
 
 
@@ -42,7 +47,7 @@
 %token <yy_str> T_VAR T_TRUE T_FALSE T_NULL T_STRINGCONSTANT T_INTCONSTANT T_CHARCONSTANT T_HEXCONSTANT
 %token <yy_int> T_VOID T_INTTYPE T_BOOLTYPE T_STRINGTYPE 
 // compare & operator
-%token T_EQ T_NEQ T_GEQ T_GT T_LEQ T_LT T_PLUS T_MINUS T_MULT T_DIV T_MOD T_NOT T_OR T_AND T_ASSIGN 
+%token <yy_int> T_EQ T_NEQ T_GEQ T_GT T_LEQ T_LT T_PLUS T_MINUS T_MULT T_DIV T_MOD T_NOT T_OR T_AND T_ASSIGN 
 // function
 %token T_FUNC T_RETURN T_WHILE T_IF T_ELSE T_FOR T_BREAK T_CONTINUE
 // sign
@@ -131,7 +136,7 @@ stat: block
 expr: T_ID
 	| methodCall
 	| constant
-	| expr binaryOperators expr
+	| expr binaryOperators expr	{binaryCompute($<yy_str>1, $2, $<yy_str>3);}
 	| unaryOperators expr
 	| T_LPAREN expr T_RPAREN
 	| T_ID T_LSB expr T_RSB
@@ -272,3 +277,31 @@ void printSymbols(){
 	printf("\n");
 }
 
+// math compute
+void binaryCompute(char *a_name, int operator, char *b_name){
+	symbol a = symbols[searchSymbol(a_name)], b = symbols[searchSymbol(b_name)];
+	if(a.type != T_INTTYPE || b.type != T_INTTYPE){
+		yyerror("Wrong type to calculate.");
+		exit(1);
+	}
+	switch(operator){
+		case T_PLUS:
+			printf("%d + %d = %d\n", a.intValue, b.intValue, a.intValue + b.intValue);
+			break;
+		case T_MINUS:
+			printf("%d - %d = %d\n", a.intValue, b.intValue, a.intValue - b.intValue);
+			break;
+		case T_MULT:
+			printf("%d * %d = %d\n", a.intValue, b.intValue, a.intValue * b.intValue);
+			break;
+		case T_DIV:
+			printf("%d / %d = %d\n", a.intValue, b.intValue, a.intValue / b.intValue);
+			break;
+		case T_MOD:
+			printf("%d mod %d = %d\n", a.intValue, b.intValue, a.intValue % b.intValue);
+			break;
+		default:
+			printf("unexpected operator\n");
+				break;
+	}
+}

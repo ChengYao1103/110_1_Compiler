@@ -82,6 +82,7 @@
     extern int yylineno;
     bool is_error = false;
     
+    // symbol table
     typedef struct symbol{
 		int type;
 		char name[100];
@@ -90,14 +91,18 @@
 		char stringValue[MAXSIZE];
 		int passing; // value or reference
 	}symbol;
+	
 	int symbol_count = 0;
 	symbol symbols[MAXSIZE];
 	int searchSymbol(char *name);
 	void createSymbol(char *name, int type, char* value);
 	void printSymbols();
+	
+	// function
+	void binaryCompute(char *a_name, int operator, char *b_name);
 
 
-#line 101 "y.tab.c"
+#line 106 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -259,12 +264,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 33 "yacc.y"
+#line 38 "yacc.y"
 
 	char *yy_str;
 	int yy_int;
 
-#line 268 "y.tab.c"
+#line 273 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -645,16 +650,16 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    65,    65,    68,    69,    70,    72,    73,    74,    78,
-      79,    80,    82,    83,    84,    85,    89,    90,    91,    93,
-      94,    96,    97,    99,   100,   102,   103,   107,   108,   109,
-     111,   114,   115,   116,   117,   119,   120,   121,   122,   123,
-     124,   125,   126,   127,   128,   129,   131,   132,   133,   134,
-     135,   136,   137,   140,   141,   143,   144,   145,   149,   150,
-     152,   153,   155,   156,   157,   158,   159,   161,   162,   163,
-     164,   165,   166,   167,   168,   172,   173,   175,   176,   178,
-     179,   181,   182,   184,   185,   187,   188,   189,   190,   191,
-     192
+       0,    70,    70,    73,    74,    75,    77,    78,    79,    83,
+      84,    85,    87,    88,    89,    90,    94,    95,    96,    98,
+      99,   101,   102,   104,   105,   107,   108,   112,   113,   114,
+     116,   119,   120,   121,   122,   124,   125,   126,   127,   128,
+     129,   130,   131,   132,   133,   134,   136,   137,   138,   139,
+     140,   141,   142,   145,   146,   148,   149,   150,   154,   155,
+     157,   158,   160,   161,   162,   163,   164,   166,   167,   168,
+     169,   170,   171,   172,   173,   177,   178,   180,   181,   183,
+     184,   186,   187,   189,   190,   192,   193,   194,   195,   196,
+     197
 };
 #endif
 
@@ -1585,49 +1590,55 @@ yyreduce:
   switch (yyn)
     {
   case 14:
-#line 84 "yacc.y"
+#line 89 "yacc.y"
                                                         { createSymbol((yyvsp[-4].yy_str), (yyvsp[-3].yy_int), (yyvsp[-1].yy_str)); }
-#line 1591 "y.tab.c"
+#line 1596 "y.tab.c"
     break;
 
   case 15:
-#line 85 "yacc.y"
+#line 90 "yacc.y"
                                 {printSymbols();}
-#line 1597 "y.tab.c"
+#line 1602 "y.tab.c"
+    break;
+
+  case 49:
+#line 139 "yacc.y"
+                                        {binaryCompute((yyvsp[-2].yy_str), (yyvsp[-1].yy_int), (yyvsp[0].yy_str));}
+#line 1608 "y.tab.c"
     break;
 
   case 86:
-#line 188 "yacc.y"
+#line 193 "yacc.y"
                         {(yyval.yy_str) = (yyvsp[0].yy_str);}
-#line 1603 "y.tab.c"
+#line 1614 "y.tab.c"
     break;
 
   case 87:
-#line 189 "yacc.y"
+#line 194 "yacc.y"
                                 {(yyval.yy_str) = (yyvsp[0].yy_str);}
-#line 1609 "y.tab.c"
+#line 1620 "y.tab.c"
     break;
 
   case 88:
-#line 190 "yacc.y"
+#line 195 "yacc.y"
                                 {(yyval.yy_str) = (yyvsp[0].yy_str);}
-#line 1615 "y.tab.c"
+#line 1626 "y.tab.c"
     break;
 
   case 89:
-#line 191 "yacc.y"
+#line 196 "yacc.y"
                                         {(yyval.yy_str) = "1";}
-#line 1621 "y.tab.c"
+#line 1632 "y.tab.c"
     break;
 
   case 90:
-#line 192 "yacc.y"
+#line 197 "yacc.y"
                                         {(yyval.yy_str) = "1";}
-#line 1627 "y.tab.c"
+#line 1638 "y.tab.c"
     break;
 
 
-#line 1631 "y.tab.c"
+#line 1642 "y.tab.c"
 
       default: break;
     }
@@ -1859,7 +1870,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 196 "yacc.y"
+#line 201 "yacc.y"
 
 
 int main(void) {
@@ -1939,3 +1950,31 @@ void printSymbols(){
 	printf("\n");
 }
 
+// math compute
+void binaryCompute(char *a_name, int operator, char *b_name){
+	symbol a = symbols[searchSymbol(a_name)], b = symbols[searchSymbol(b_name)];
+	if(a.type != T_INTTYPE || b.type != T_INTTYPE){
+		yyerror("Wrong type to calculate.");
+		exit(1);
+	}
+	switch(operator){
+		case T_PLUS:
+			printf("%d + %d = %d\n", a.intValue, b.intValue, a.intValue + b.intValue);
+			break;
+		case T_MINUS:
+			printf("%d - %d = %d\n", a.intValue, b.intValue, a.intValue - b.intValue);
+			break;
+		case T_MULT:
+			printf("%d * %d = %d\n", a.intValue, b.intValue, a.intValue * b.intValue);
+			break;
+		case T_DIV:
+			printf("%d / %d = %d\n", a.intValue, b.intValue, a.intValue / b.intValue);
+			break;
+		case T_MOD:
+			printf("%d mod %d = %d\n", a.intValue, b.intValue, a.intValue % b.intValue);
+			break;
+		default:
+			printf("unexpected operator\n");
+				break;
+	}
+}

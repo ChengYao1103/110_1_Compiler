@@ -381,21 +381,21 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[138] =
     {   0,
-        0,    0,   56,   54,   49,   48,   35,   54,   32,   54,
-       54,   44,   45,   33,   31,   19,   30,   53,   52,   39,
-       39,   37,   29,   51,   23,   46,   27,   28,   46,   46,
-       46,   46,   46,   46,   46,   46,   46,   46,   46,   46,
-       42,   54,   43,   49,   34,    0,   38,    0,   50,    0,
-        0,    0,    0,   39,    0,   24,   26,   21,   22,   25,
-       46,   46,   46,   46,   46,   46,   46,   46,   46,   13,
-       46,   46,   46,   46,   46,   46,   46,   46,   46,   46,
-       36,   41,    0,   47,   39,   40,   46,   46,   46,   46,
-       46,   46,   15,   46,    8,   46,   46,   46,   46,   46,
+        0,    0,   56,   54,   50,   49,   36,   54,   27,   54,
+       54,   45,   46,   25,   23,   19,   24,   53,   26,   40,
+       40,   38,   34,   52,   30,   47,   32,   33,   47,   47,
+       47,   47,   47,   47,   47,   47,   47,   47,   47,   47,
+       43,   54,   44,   50,   35,    0,   39,    0,   51,    0,
+        0,    0,    0,   40,    0,   21,   31,   28,   29,   22,
+       47,   47,   47,   47,   47,   47,   47,   47,   47,   13,
+       47,   47,   47,   47,   47,   47,   47,   47,   47,   47,
+       37,   42,    0,   48,   40,   41,   47,   47,   47,   47,
+       47,   47,   15,   47,    8,   47,   47,   47,   47,   47,
 
-       46,    5,   46,   46,    7,   46,   46,   20,   46,   46,
-        2,   12,   46,   46,   46,   46,   10,    6,   46,   17,
-       46,   46,   11,   46,    1,   46,   46,    4,   46,   14,
-       46,    3,    9,   46,   16,   18,    0
+       47,    5,   47,   47,    7,   47,   47,   20,   47,   47,
+        2,   12,   47,   47,   47,   47,   10,    6,   47,   17,
+       47,   47,   11,   47,    1,   47,   47,    4,   47,   14,
+       47,    3,    9,   47,   16,   18,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -547,7 +547,7 @@ static const flex_int32_t yy_rule_can_match_eol[56] =
     {   0,
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0,     };
+    0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0,     };
 
 static yy_state_type yy_last_accepting_state;
 static char *yy_last_accepting_cpos;
@@ -963,164 +963,164 @@ YY_RULE_SETUP
 case 21:
 YY_RULE_SETUP
 #line 35 "lex.l"
-{ return T_EQ;  }
+{ return T_LEFTSHIFT;  }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
 #line 36 "lex.l"
-{ return T_GEQ; }
+{ return T_RIGHTSHIFT; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
 #line 37 "lex.l"
-{ return T_GT;  }
+{ yylval.yy_int = T_PLUS;return T_PLUS; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
 #line 38 "lex.l"
-{ return T_LEFTSHIFT;  }
+{ yylval.yy_int = T_MINUS;return T_MINUS; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
 #line 39 "lex.l"
-{ return T_RIGHTSHIFT; }
+{ yylval.yy_int = T_MULT;return T_MULT; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
 #line 40 "lex.l"
-{ return T_LEQ; }
+{ yylval.yy_int = T_DIV;return T_DIV; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
 #line 41 "lex.l"
-{ return T_LSB; }
+{ yylval.yy_int = T_MOD;return T_MOD; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
 #line 42 "lex.l"
-{ return T_RSB; }
+{ yylval.yy_int = T_EQ;return T_EQ;  }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
 #line 43 "lex.l"
-{ return T_LT; }
+{ yylval.yy_int = T_GEQ;return T_GEQ; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
 #line 44 "lex.l"
-{ return T_MINUS; }
+{ yylval.yy_int = T_GT;return T_GT;  }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
 #line 45 "lex.l"
-{ return T_PLUS; }
+{ yylval.yy_int = T_LEQ;return T_LEQ; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
 #line 46 "lex.l"
-{ return T_MOD; }
+{ yylval.yy_int = T_LSB;return T_LSB; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
 #line 47 "lex.l"
-{ return T_MULT; }
+{ yylval.yy_int = T_RSB;return T_RSB; }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
 #line 48 "lex.l"
-{ return T_NEQ; }
+{ yylval.yy_int = T_PLUS;return T_LT; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
 #line 49 "lex.l"
-{ return T_NOT; }
+{ yylval.yy_int = T_NEQ;return T_NEQ; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
 #line 50 "lex.l"
-{ return T_OR; }
+{ yylval.yy_int = T_NOT;return T_NOT; }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
 #line 51 "lex.l"
-{ return T_SEMICOLON; }
+{ yylval.yy_int = T_OR;return T_OR; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
 #line 52 "lex.l"
-{ return T_STRINGCONSTANT; }
+{ return T_SEMICOLON; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
 #line 53 "lex.l"
-{ yylval.yy_str = strdup(yytext);return T_INTCONSTANT; }
+{ return T_STRINGCONSTANT; }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
 #line 54 "lex.l"
-{ return T_HEXCONSTANT; }
+{ yylval.yy_str = strdup(yytext);return T_INTCONSTANT; }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
 #line 55 "lex.l"
-{ yylval.yy_str = strdup(yytext);return T_CHARCONSTANT; }
+{ return T_HEXCONSTANT; }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
 #line 56 "lex.l"
-{ return T_LCB; }
+{ yylval.yy_str = strdup(yytext);return T_CHARCONSTANT; }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
 #line 57 "lex.l"
-{ return T_RCB; }
+{ return T_LCB; }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
 #line 58 "lex.l"
-{ return T_LPAREN; }
+{ return T_RCB; }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
 #line 59 "lex.l"
-{ return T_RPAREN; }
+{ return T_LPAREN; }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
 #line 60 "lex.l"
-{ yylval.yy_str = strdup(yytext);return T_ID; }
+{ return T_RPAREN; }
 	YY_BREAK
 case 47:
-/* rule 47 can match eol */
 YY_RULE_SETUP
 #line 61 "lex.l"
-{ line++;yyset_lineno(line); }	// if return something will occur error
+{ yylval.yy_str = strdup(yytext);return T_ID; }
 	YY_BREAK
 case 48:
 /* rule 48 can match eol */
 YY_RULE_SETUP
 #line 62 "lex.l"
-{ line++;yyset_lineno(line);}
+{ line++;yyset_lineno(line); }	// if return something will occur error
 	YY_BREAK
 case 49:
+/* rule 49 can match eol */
 YY_RULE_SETUP
 #line 63 "lex.l"
-{  }	
+{ line++;yyset_lineno(line);}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
 #line 64 "lex.l"
-{ return T_AND; }
+{  }	
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
 #line 65 "lex.l"
-{ return T_ASSIGN; }
+{ return T_AND; }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
 #line 66 "lex.l"
-{ return T_DIV; }
+{ return T_ASSIGN; }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP

@@ -32,22 +32,23 @@ break										{ return T_BREAK; }
 continue									{ return T_CONTINUE; }
 , 											{ return T_COMMA; }
 else										{ return T_ELSE; }
-==											{ return T_EQ;  }
->=											{ return T_GEQ; }
->											{ return T_GT;  }
 \<\<										{ return T_LEFTSHIFT;  }
 >>											{ return T_RIGHTSHIFT; }
-\<=											{ return T_LEQ; }
-\[											{ return T_LSB; }
-\]											{ return T_RSB; }
-\<											{ return T_LT; }
-\-											{ return T_MINUS; }
-\+											{ return T_PLUS; }
-\%											{ return T_MOD; }
-\*											{ return T_MULT; }
-!=											{ return T_NEQ; }
-!											{ return T_NOT; }
-\|\|										{ return T_OR; }
+\+											{ yylval.yy_int = T_PLUS;return T_PLUS; }
+\-											{ yylval.yy_int = T_MINUS;return T_MINUS; }
+\*											{ yylval.yy_int = T_MULT;return T_MULT; }
+\/											{ yylval.yy_int = T_DIV;return T_DIV; }
+\%											{ yylval.yy_int = T_MOD;return T_MOD; }
+==											{ yylval.yy_int = T_EQ;return T_EQ;  }
+>=											{ yylval.yy_int = T_GEQ;return T_GEQ; }
+>											{ yylval.yy_int = T_GT;return T_GT;  }
+\<=											{ yylval.yy_int = T_LEQ;return T_LEQ; }
+\[											{ yylval.yy_int = T_LSB;return T_LSB; }
+\]											{ yylval.yy_int = T_RSB;return T_RSB; }
+\<											{ yylval.yy_int = T_PLUS;return T_LT; }
+!=											{ yylval.yy_int = T_NEQ;return T_NEQ; }
+!											{ yylval.yy_int = T_NOT;return T_NOT; }
+\|\|										{ yylval.yy_int = T_OR;return T_OR; }
 ;											{ return T_SEMICOLON; }
 \"([^\n"\\]|\\(a|b|t|n|v|f|r|\\|\'|\"))*\"	{ return T_STRINGCONSTANT; }
 [0-9]+(\.[0-9]+)?							{ yylval.yy_str = strdup(yytext);return T_INTCONSTANT; }
@@ -63,7 +64,6 @@ else										{ return T_ELSE; }
 [\t\r\a\v\b ]+								{  }	
 &&											{ return T_AND; }
 =											{ return T_ASSIGN; }
-\/											{ return T_DIV; }
 "."											{ return T_DOT; } 
 .											{ printf("Error: unexpected character in input\n"); return -1; }
 
