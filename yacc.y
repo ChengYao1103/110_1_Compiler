@@ -23,6 +23,7 @@
 	}symbol;
 	int symbol_count = 0;
 	symbol symbols[MAXSIZE];
+	int searchSymbol(char *name);
 	void createSymbol(char *name, int type, char* value);
 	void printSymbols();
 
@@ -207,22 +208,27 @@ void yyerror(const char* msg) {
 	fprintf(stderr, "%s at line %d\n", msg, yyget_lineno());
 }
 
-// check variable or function name is not used
-void checkName(char *name){
+// search element in symbol table return index
+int searchSymbol(char *name){
 	for(int i=0;i<symbol_count;i++){
 		if(strcmp(symbols[i].name, name)==0){
-			char error[] = "The name \"";
-			strcat(error, name);
-			strcat(error, "\" has duplicate declare");
-			yyerror(error);
-			exit(1);
+			return i;
 		}
 	}
+	return -1;
 }
 
 // store variable
 void createSymbol(char *name, int type, char* value){
-	checkName(name);
+	int check = searchSymbol(name);
+	if(check != -1){
+		char error[] = "The name \"";
+		strcat(error, name);
+		strcat(error, "\" has duplicate declare");
+		yyerror(error);
+		exit(1);
+	}
+	
 	strcpy(symbols[symbol_count].name, name);
 	switch(type){
 		case T_INTTYPE:
