@@ -204,10 +204,25 @@ int main(void) {
 
 void yyerror(const char* msg) {
 	is_error = true;
-    fprintf(stderr, "%s at line %d\n", msg, yyget_lineno());
+	fprintf(stderr, "%s at line %d\n", msg, yyget_lineno());
 }
 
+// check variable or function name is not used
+void checkName(char *name){
+	for(int i=0;i<symbol_count;i++){
+		if(strcmp(symbols[i].name, name)==0){
+			char error[] = "The name \"";
+			strcat(error, name);
+			strcat(error, "\" has duplicate declare");
+			yyerror(error);
+			exit(1);
+		}
+	}
+}
+
+// store variable
 void createSymbol(char *name, int type, char* value){
+	checkName(name);
 	strcpy(symbols[symbol_count].name, name);
 	switch(type){
 		case T_INTTYPE:
@@ -228,6 +243,7 @@ void createSymbol(char *name, int type, char* value){
 	symbol_count += 1;
 }
 
+// print symbol table
 void printSymbols(){
 	for(int i=0;i<symbol_count;i++){
 		printf("symbol name:%s\t", symbols[i].name);

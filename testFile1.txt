@@ -5,6 +5,7 @@ package helloParser {
 	var a int = 10;
 	var b int = 20;
 	var c bool = true;
+	var a int = 20;
 	print;
 	func main(a int) int {
 		var c int;
