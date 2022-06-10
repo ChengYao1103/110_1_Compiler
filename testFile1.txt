@@ -4,15 +4,13 @@ package helloParser {
 	// comment test....35531313554534
 	var a int = 20;
 	var b int = 10;
-	var c bool = true;
-	print;
+	var x bool = true;
+	var y bool = false;
 	func main(a int) int {
 		var c int;
-		c = a+b;
-		c = a-b;
-		c = a*b;
-		c = a/b;
-		c = a%b;
+		var d int;
+		c = b-a;
+		d = 100;
 	}
 }
 

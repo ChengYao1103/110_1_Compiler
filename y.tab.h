@@ -100,8 +100,7 @@ extern int yydebug;
     T_EXTERN = 306,
     T_COMMENT = 307,
     T_WHITESPACE = 308,
-    T_WHITESPACE_N = 309,
-    T_PRINT = 310
+    T_WHITESPACE_N = 309
   };
 #endif
 /* Tokens.  */
@@ -157,18 +156,17 @@ extern int yydebug;
 #define T_COMMENT 307
 #define T_WHITESPACE 308
 #define T_WHITESPACE_N 309
-#define T_PRINT 310
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 38 "yacc.y"
+#line 40 "yacc.y"
 
 	char *yy_str;
 	int yy_int;
 
-#line 172 "y.tab.h"
+#line 170 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

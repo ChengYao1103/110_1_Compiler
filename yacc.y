@@ -27,10 +27,12 @@
 	symbol symbols[MAXSIZE];
 	int searchSymbol(char *name);
 	void createSymbol(char *name, int type, char* value);
+	void updateSymbol(char *name, char *value);
 	void printSymbols();
 	
 	// function
-	void binaryCompute(char *a_name, int operator, char *b_name);
+	const char* binaryCompute(char *a_name, int operator, char *b_name);
+	char computeResult[20];
 
 %}
 
@@ -54,7 +56,7 @@
 %token T_COMMA T_LSB T_RSB T_SEMICOLON T_LCB T_RCB T_LPAREN T_RPAREN T_DOT T_LEFTSHIFT T_RIGHTSHIFT
 // other
 %token <yy_str> T_ID
-%token T_PACKAGE T_EXTERN T_COMMENT T_WHITESPACE T_WHITESPACE_N T_PRINT
+%token T_PACKAGE T_EXTERN T_COMMENT T_WHITESPACE T_WHITESPACE_N
 
 %left T_PLUS T_MINUS T_MULT T_DIV T_MOD
 %right T_ASSIGN
@@ -67,7 +69,7 @@
 
 /* --------grammar-------- */
 
-program: externs T_PACKAGE T_ID T_LCB fieldDecls methodDecls T_RCB;
+program: externs T_PACKAGE T_ID T_LCB fieldDecls methodDecls T_RCB	{printSymbols();};
 
 // extern
 externs: externs externDef
@@ -87,7 +89,6 @@ fieldDecls: fieldDecls fieldDecl
 fieldDecl: T_VAR ids type T_SEMICOLON
 	| T_VAR ids arrayType T_SEMICOLON
 	| T_VAR T_ID type T_ASSIGN constant T_SEMICOLON	{ createSymbol($2, $3, $5); }
-	| T_PRINT T_SEMICOLON	{printSymbols();}	// add to print symbol table
 ;
 
 // method
@@ -113,7 +114,8 @@ varDecls: varDecls varDecl
 	| varDecl
 	|
 ;
-varDecl: T_VAR ids type T_SEMICOLON ;
+varDecl: T_VAR ids type T_SEMICOLON	{createSymbol($<yy_str>2, $3, "0");}
+;
 
 // statements & expressions
 block: T_LCB varDecls stats T_RCB ;
@@ -135,8 +137,8 @@ stat: block
 ;
 expr: T_ID
 	| methodCall
-	| constant
-	| expr binaryOperators expr	{binaryCompute($<yy_str>1, $2, $<yy_str>3);}
+	| constant	{$<yy_str>$ = $1;}
+	| expr binaryOperators expr	{ $<yy_str>$ = binaryCompute($<yy_str>1, $2, $<yy_str>3);}
 	| unaryOperators expr
 	| T_LPAREN expr T_RPAREN
 	| T_ID T_LSB expr T_RSB
@@ -145,8 +147,9 @@ expr: T_ID
 assigns: assigns T_COMMA assign
 	| assign
 ;
-assign: lValue T_ASSIGN expr ;
-lValue: T_ID
+assign: lValue T_ASSIGN expr	{updateSymbol($<yy_str>1, $<yy_str>3);}
+;
+lValue: T_ID	{$<yy_str>$ = $1;}
 	| T_ID T_LSB expr T_RSB
 ;
 
@@ -175,7 +178,7 @@ compareOperator: T_GEQ
 
 // id & types
 ids: ids T_COMMA T_ID
-	| T_ID
+	| T_ID	{$<yy_str>$ = $1;}
 ;
 idTypes: idTypes T_COMMA idTypes
 	| T_ID type
@@ -194,7 +197,7 @@ constant: T_INTCONSTANT	{$$ = $1;}
 	| T_CHARCONSTANT	{$$ = $1;}
 	| T_STRINGCONSTANT	{$$ = $1;}
 	| T_TRUE			{$$ = "1";}
-	| T_FALSE			{$$ = "1";}
+	| T_FALSE			{$$ = "0";}
 ;
 
 
@@ -224,7 +227,7 @@ int searchSymbol(char *name){
 }
 
 // store variable
-void createSymbol(char *name, int type, char* value){
+void createSymbol(char *name, int type, char *value){
 	int check = searchSymbol(name);
 	if(check != -1){
 		char error[] = "The name \"";
@@ -246,12 +249,38 @@ void createSymbol(char *name, int type, char* value){
 			break;
 		case T_BOOLTYPE:
 			symbols[symbol_count].type = T_BOOLTYPE;
-			symbols[symbol_count].boolValue = strcmp(value, "true");
+			symbols[symbol_count].intValue = atoi(value);
 			break;
 		default:
 			break;
 	}
 	symbol_count += 1;
+}
+
+// update value of symbol
+
+void updateSymbol(char *name, char *value){
+	int index = searchSymbol(name);
+	if(index == -1){
+		char error[] = "The name \"";
+		strcat(error, name);
+		strcat(error, "\" doesn't exist");
+		yyerror(error);
+		exit(1);
+	}
+	switch(symbols[index].type){
+		case T_INTTYPE:
+			symbols[index].intValue = atoi(value);
+			break;
+		case T_STRINGTYPE:
+			strcpy(symbols[index].stringValue, value);
+			break;
+		case T_BOOLTYPE:
+			symbols[index].intValue = atoi(value);
+			break;
+		default:
+			break;
+	}
 }
 
 // print symbol table
@@ -267,7 +296,7 @@ void printSymbols(){
 				printf("symbol value:%s\n", symbols[i].stringValue);
 				break;
 			case T_BOOLTYPE:
-				printf("symbol value:%s\n", symbols[i].boolValue? "true" : "false");
+				printf("symbol value:%s\n", symbols[i].intValue? "true" : "false");
 				break;
 			default:
 				printf("unexpected type\n");
@@ -278,30 +307,67 @@ void printSymbols(){
 }
 
 // math compute
-void binaryCompute(char *a_name, int operator, char *b_name){
-	symbol a = symbols[searchSymbol(a_name)], b = symbols[searchSymbol(b_name)];
-	if(a.type != T_INTTYPE || b.type != T_INTTYPE){
+const char* binaryCompute(char *a_name, int operator, char *b_name){
+	int index;
+	symbol a, b;
+	// handle a, if a is name then search symbol , if not then assign value
+	if(atoi(a_name) == 0 && strcmp(a_name, "0") != 0){
+		index = searchSymbol(a_name);
+		if(index == -1){
+			yyerror("The variable doesn't exist");
+			exit(1);
+		}
+		a = symbols[index];
+	}
+	else{
+		a.intValue = atoi(a_name);
+		a.type = T_INTTYPE;
+	}
+	// handle b
+	if(atoi(b_name) == 0 && strcmp(b_name, "0") != 0){
+		index = searchSymbol(b_name);
+		if(index == -1){
+			yyerror("The variable doesn't exist");
+			exit(1);
+		}
+		b = symbols[index];
+	}
+	else{
+		b.intValue = atoi(b_name);
+		b.type = T_INTTYPE;
+	}
+	// type error
+	if((a.type != T_INTTYPE && a.type != T_BOOLTYPE) || (b.type != T_INTTYPE && b.type != T_BOOLTYPE)){
 		yyerror("Wrong type to calculate.");
 		exit(1);
 	}
+	
+	int result;
 	switch(operator){
 		case T_PLUS:
 			printf("%d + %d = %d\n", a.intValue, b.intValue, a.intValue + b.intValue);
+			result = a.intValue + b.intValue;
 			break;
 		case T_MINUS:
 			printf("%d - %d = %d\n", a.intValue, b.intValue, a.intValue - b.intValue);
+			result = a.intValue - b.intValue;
 			break;
 		case T_MULT:
 			printf("%d * %d = %d\n", a.intValue, b.intValue, a.intValue * b.intValue);
+			result = a.intValue * b.intValue;
 			break;
 		case T_DIV:
 			printf("%d / %d = %d\n", a.intValue, b.intValue, a.intValue / b.intValue);
+			result = a.intValue / b.intValue;
 			break;
 		case T_MOD:
 			printf("%d mod %d = %d\n", a.intValue, b.intValue, a.intValue % b.intValue);
+			result = a.intValue % b.intValue;
 			break;
 		default:
 			printf("unexpected operator\n");
 				break;
 	}
+	sprintf(computeResult, "%d", result);
+	return computeResult;
 }

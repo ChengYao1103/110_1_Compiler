@@ -3,7 +3,6 @@ extern func print_int(int) void;
 package GreatestCommonDivisor {
     var a int = 10;
     var b int = 20;
-    print;
 
     func main() int {
         var x, y, z int;

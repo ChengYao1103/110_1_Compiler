@@ -12,7 +12,6 @@
 
 %%
 
-print										{ return T_PRINT; }
 func										{ return T_FUNC; }
 return										{ return T_RETURN; }
 while										{ return T_WHILE; }
