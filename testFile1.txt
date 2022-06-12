@@ -1,16 +1,21 @@
 extern func test(bool) void;
 
 package helloParser {
-	// comment test....35531313554534
-	var a int = 20;
+	// comment test....1
+	var a int = 20;	// comment test....2
 	var b int = 10;
-	var x bool = true;
-	var y bool = false;
-	func main(a int) int {
-		var c int;
-		var d bool;
-		c = b-a;
-		d = y;
+	var myVariable int = 100;
+	var x, y bool;
+	func main(param1 bool, param2 int) int {
+		var c, d, e int;
+		c = a;
+		d = a-b;
+		e = 25*10+2;
+		myVariable = myVariable % 3;
+		x = true;
+		y = false;
+	}
+	func myFunc() int {
 	}
 }
 

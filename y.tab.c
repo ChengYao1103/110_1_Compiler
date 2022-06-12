@@ -657,15 +657,15 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    81,    81,    84,    85,    86,    88,    89,    90,    94,
-      95,    96,    98,    99,   100,   104,   105,   106,   108,   109,
-     111,   112,   114,   115,   117,   118,   122,   123,   124,   126,
-     135,   136,   137,   138,   140,   141,   142,   143,   144,   145,
-     146,   147,   148,   149,   150,   152,   153,   154,   155,   156,
-     157,   158,   161,   162,   164,   166,   167,   171,   172,   174,
-     175,   177,   178,   179,   180,   181,   183,   184,   185,   186,
-     187,   188,   189,   190,   194,   195,   197,   198,   200,   201,
-     203,   204,   206,   207,   209,   210,   211,   212,   213,   214
+       0,    82,    82,    85,    86,    87,    89,    90,    91,    95,
+      96,    97,    99,   105,   106,   110,   111,   112,   114,   121,
+     123,   124,   126,   127,   129,   130,   134,   135,   136,   138,
+     147,   148,   149,   150,   152,   153,   154,   155,   156,   157,
+     158,   159,   160,   161,   162,   164,   165,   166,   167,   168,
+     169,   170,   173,   174,   176,   178,   179,   183,   184,   186,
+     187,   189,   190,   191,   192,   193,   195,   196,   197,   198,
+     199,   200,   201,   202,   206,   207,   209,   210,   212,   213,
+     215,   216,   218,   219,   221,   222,   223,   224,   225,   226
 };
 #endif
 
@@ -1594,144 +1594,167 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 81 "yacc.y"
+#line 82 "yacc.y"
                                                                         {printSymbols();}
 #line 1600 "y.tab.c"
     break;
 
-  case 14:
-#line 100 "yacc.y"
-                                                        { createSymbol((yyvsp[-4].yy_str), (yyvsp[-3].yy_int), T_VOID, (yyvsp[-1].yy_str), ""); }
-#line 1606 "y.tab.c"
-    break;
-
-  case 18:
-#line 108 "yacc.y"
-                                                                        { createSymbol((yyvsp[-5].yy_str), (yyvsp[-6].yy_int), (yyvsp[-1].yy_int), "0", ""); }
-#line 1612 "y.tab.c"
-    break;
-
-  case 19:
-#line 109 "yacc.y"
-                                                                { createSymbol((yyvsp[-4].yy_str), (yyvsp[-5].yy_int), (yyvsp[-1].yy_int), "0", ""); }
-#line 1618 "y.tab.c"
-    break;
-
-  case 29:
-#line 126 "yacc.y"
+  case 12:
+#line 99 "yacc.y"
                                         {
 	for(int i=0;i<declaredIndex;i++){
 		createSymbol(declaredSymbol[i], (yyvsp[-1].yy_int), T_VOID, "0", "");
 	}
 	declaredIndex = 0;
 }
+#line 1611 "y.tab.c"
+    break;
+
+  case 14:
+#line 106 "yacc.y"
+                                                        { createSymbol((yyvsp[-4].yy_str), (yyvsp[-3].yy_int), T_VOID, (yyvsp[-1].yy_str), ""); }
+#line 1617 "y.tab.c"
+    break;
+
+  case 18:
+#line 114 "yacc.y"
+                                                                        {
+	/*for(int i=0;i<declaredIndex;i++){
+		createSymbol($2, $1, $6, "", declaredSymbol[i]);
+	}
+	declaredIndex = 0;*/
+	createSymbol((yyvsp[-5].yy_str), (yyvsp[-6].yy_int), (yyvsp[-1].yy_int), "", "");
+}
 #line 1629 "y.tab.c"
     break;
 
-  case 47:
-#line 154 "yacc.y"
-                        {(yyval.yy_str) = (yyvsp[0].yy_str);}
+  case 19:
+#line 121 "yacc.y"
+                                                                { createSymbol((yyvsp[-4].yy_str), (yyvsp[-5].yy_int), (yyvsp[-1].yy_int), "0", ""); }
 #line 1635 "y.tab.c"
     break;
 
+  case 29:
+#line 138 "yacc.y"
+                                        {
+	for(int i=0;i<declaredIndex;i++){
+		createSymbol(declaredSymbol[i], (yyvsp[-1].yy_int), T_VOID, "0", "");
+	}
+	declaredIndex = 0;
+}
+#line 1646 "y.tab.c"
+    break;
+
+  case 47:
+#line 166 "yacc.y"
+                        {(yyval.yy_str) = (yyvsp[0].yy_str);}
+#line 1652 "y.tab.c"
+    break;
+
   case 48:
-#line 155 "yacc.y"
+#line 167 "yacc.y"
                                         { (yyval.yy_str) = binaryCompute((yyvsp[-2].yy_str), (yyvsp[-1].yy_int), (yyvsp[0].yy_str));}
-#line 1641 "y.tab.c"
+#line 1658 "y.tab.c"
     break;
 
   case 54:
-#line 164 "yacc.y"
+#line 176 "yacc.y"
                                 {updateSymbol((yyvsp[-2].yy_str), (yyvsp[0].yy_str));}
-#line 1647 "y.tab.c"
+#line 1664 "y.tab.c"
     break;
 
   case 55:
-#line 166 "yacc.y"
+#line 178 "yacc.y"
                 {(yyval.yy_str) = (yyvsp[0].yy_str);}
-#line 1653 "y.tab.c"
+#line 1670 "y.tab.c"
     break;
 
   case 74:
-#line 194 "yacc.y"
+#line 206 "yacc.y"
                         {(yyval.yy_strList) = addList((yyvsp[0].yy_str));}
-#line 1659 "y.tab.c"
+#line 1676 "y.tab.c"
     break;
 
   case 75:
-#line 195 "yacc.y"
+#line 207 "yacc.y"
                 {(yyval.yy_strList) = addList((yyvsp[0].yy_str));}
-#line 1665 "y.tab.c"
+#line 1682 "y.tab.c"
+    break;
+
+  case 77:
+#line 210 "yacc.y"
+                        { addList((yyvsp[-1].yy_str));}
+#line 1688 "y.tab.c"
     break;
 
   case 78:
-#line 200 "yacc.y"
+#line 212 "yacc.y"
                                         {(yyval.yy_int) = (yyvsp[0].yy_int);}
-#line 1671 "y.tab.c"
+#line 1694 "y.tab.c"
     break;
 
   case 79:
-#line 201 "yacc.y"
+#line 213 "yacc.y"
                                         {(yyval.yy_int) = (yyvsp[0].yy_int);}
-#line 1677 "y.tab.c"
+#line 1700 "y.tab.c"
     break;
 
   case 80:
-#line 203 "yacc.y"
+#line 215 "yacc.y"
                                 {(yyval.yy_int) = (yyvsp[0].yy_int);}
-#line 1683 "y.tab.c"
+#line 1706 "y.tab.c"
     break;
 
   case 81:
-#line 204 "yacc.y"
+#line 216 "yacc.y"
                                                 {(yyval.yy_int) = (yyvsp[0].yy_int);}
-#line 1689 "y.tab.c"
+#line 1712 "y.tab.c"
     break;
 
   case 82:
-#line 206 "yacc.y"
+#line 218 "yacc.y"
                                         {(yyval.yy_int) = (yyvsp[0].yy_int);}
-#line 1695 "y.tab.c"
+#line 1718 "y.tab.c"
     break;
 
   case 83:
-#line 207 "yacc.y"
+#line 219 "yacc.y"
                                                 {(yyval.yy_int) = (yyvsp[0].yy_int);}
-#line 1701 "y.tab.c"
+#line 1724 "y.tab.c"
     break;
 
   case 85:
-#line 210 "yacc.y"
+#line 222 "yacc.y"
                         {(yyval.yy_str) = (yyvsp[0].yy_str);}
-#line 1707 "y.tab.c"
+#line 1730 "y.tab.c"
     break;
 
   case 86:
-#line 211 "yacc.y"
+#line 223 "yacc.y"
                                 {(yyval.yy_str) = (yyvsp[0].yy_str);}
-#line 1713 "y.tab.c"
+#line 1736 "y.tab.c"
     break;
 
   case 87:
-#line 212 "yacc.y"
+#line 224 "yacc.y"
                                 {(yyval.yy_str) = (yyvsp[0].yy_str);}
-#line 1719 "y.tab.c"
+#line 1742 "y.tab.c"
     break;
 
   case 88:
-#line 213 "yacc.y"
+#line 225 "yacc.y"
                                         {(yyval.yy_str) = "1";}
-#line 1725 "y.tab.c"
+#line 1748 "y.tab.c"
     break;
 
   case 89:
-#line 214 "yacc.y"
+#line 226 "yacc.y"
                                         {(yyval.yy_str) = "0";}
-#line 1731 "y.tab.c"
+#line 1754 "y.tab.c"
     break;
 
 
-#line 1735 "y.tab.c"
+#line 1758 "y.tab.c"
 
       default: break;
     }
@@ -1963,7 +1986,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 218 "yacc.y"
+#line 230 "yacc.y"
 
 
 int main(void) {
@@ -2028,7 +2051,7 @@ void createSymbol(char *name, int type, int returnType, char *value, char* param
 // update value of symbol
 
 void updateSymbol(char *name, char *value){
-	int index = searchSymbol(name);
+	int index = searchSymbol(name), index2 = searchSymbol(value);
 	if(index == -1){
 		char error[] = "The name \"";
 		strcat(error, name);
@@ -2036,6 +2059,27 @@ void updateSymbol(char *name, char *value){
 		yyerror(error);
 		exit(1);
 	}
+	if(index2 != -1){
+		switch(symbols[index2].type){
+			case T_INTTYPE:
+				sprintf(value, "%d", symbols[index2].intValue);
+				break;
+			case T_STRINGTYPE:
+				strcpy(value, symbols[index2].stringValue);
+				break;
+			case T_BOOLTYPE:
+				sprintf(value, "%d", symbols[index2].intValue);
+				break;
+		}
+	}
+	else if(index2 == -1 && strcmp(value, "0") != 0 && atoi(value) == 0){
+		char error[] = "The name \"";
+		strcat(error, value);
+		strcat(error, "\" doesn't exist");
+		yyerror(error);
+		exit(1);
+	}
+	char tmpParam[100];
 	switch(symbols[index].type){
 		case T_INTTYPE:
 			symbols[index].intValue = atoi(value);
@@ -2045,6 +2089,11 @@ void updateSymbol(char *name, char *value){
 			break;
 		case T_BOOLTYPE:
 			symbols[index].intValue = atoi(value);
+			break;
+		case T_FUNC:
+			sprintf(tmpParam, "%s", value);
+			strcat(", ", tmpParam);
+			strcat(symbols[symbol_count].param, tmpParam);
 			break;
 		default:
 			break;

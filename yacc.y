@@ -67,8 +67,9 @@
 %token <yy_str> T_ID
 %token T_PACKAGE T_EXTERN T_COMMENT T_WHITESPACE T_WHITESPACE_N
 
-%left T_PLUS T_MINUS T_MULT T_DIV T_MOD
 %right T_ASSIGN
+%left T_PLUS T_MINUS
+%left T_MULT T_DIV T_MOD
 %left T_OR T_AND
 %left T_GEQ T_GT T_LEQ T_LT
 %left T_EQ T_NEQ
@@ -95,7 +96,12 @@ fieldDecls: fieldDecls fieldDecl
 	| fieldDecl
 	|
 ;
-fieldDecl: T_VAR ids type T_SEMICOLON
+fieldDecl: T_VAR ids type T_SEMICOLON	{
+	for(int i=0;i<declaredIndex;i++){
+		createSymbol(declaredSymbol[i], $3, T_VOID, "0", "");
+	}
+	declaredIndex = 0;
+}
 	| T_VAR ids arrayType T_SEMICOLON
 	| T_VAR T_ID type T_ASSIGN constant T_SEMICOLON	{ createSymbol($2, $3, T_VOID, $5, ""); }
 ;
@@ -105,7 +111,13 @@ methodDecls: methodDecls methodDecl
 	| methodDecl
 	|
 ;
-methodDecl: T_FUNC T_ID T_LPAREN idTypes T_RPAREN methodType block	{ createSymbol($2, $1, $6, "0", ""); }
+methodDecl: T_FUNC T_ID T_LPAREN idTypes T_RPAREN methodType block	{
+	/*for(int i=0;i<declaredIndex;i++){
+		createSymbol($2, $1, $6, "", declaredSymbol[i]);
+	}
+	declaredIndex = 0;*/
+	createSymbol($2, $1, $6, "", "");
+}
 	| T_FUNC T_ID T_LPAREN T_RPAREN methodType block	{ createSymbol($2, $1, $5, "0", ""); }
 ;
 methodCall: T_ID T_LPAREN methodArgs T_RPAREN
@@ -195,7 +207,7 @@ ids: ids T_COMMA T_ID	{$<yy_strList>$ = addList($3);}
 	| T_ID	{$<yy_strList>$ = addList($1);}
 ;
 idTypes: idTypes T_COMMA idTypes
-	| T_ID type
+	| T_ID type	{ addList($1);}
 ;
 type: T_INTTYPE				{$$ = $1;}
 	| T_BOOLTYPE			{$$ = $1;}
@@ -279,7 +291,7 @@ void createSymbol(char *name, int type, int returnType, char *value, char* param
 // update value of symbol
 
 void updateSymbol(char *name, char *value){
-	int index = searchSymbol(name);
+	int index = searchSymbol(name), index2 = searchSymbol(value);
 	if(index == -1){
 		char error[] = "The name \"";
 		strcat(error, name);
@@ -287,6 +299,27 @@ void updateSymbol(char *name, char *value){
 		yyerror(error);
 		exit(1);
 	}
+	if(index2 != -1){
+		switch(symbols[index2].type){
+			case T_INTTYPE:
+				sprintf(value, "%d", symbols[index2].intValue);
+				break;
+			case T_STRINGTYPE:
+				strcpy(value, symbols[index2].stringValue);
+				break;
+			case T_BOOLTYPE:
+				sprintf(value, "%d", symbols[index2].intValue);
+				break;
+		}
+	}
+	else if(index2 == -1 && strcmp(value, "0") != 0 && atoi(value) == 0){
+		char error[] = "The name \"";
+		strcat(error, value);
+		strcat(error, "\" doesn't exist");
+		yyerror(error);
+		exit(1);
+	}
+	char tmpParam[100];
 	switch(symbols[index].type){
 		case T_INTTYPE:
 			symbols[index].intValue = atoi(value);
@@ -296,6 +329,11 @@ void updateSymbol(char *name, char *value){
 			break;
 		case T_BOOLTYPE:
 			symbols[index].intValue = atoi(value);
+			break;
+		case T_FUNC:
+			sprintf(tmpParam, "%s", value);
+			strcat(", ", tmpParam);
+			strcat(symbols[symbol_count].param, tmpParam);
 			break;
 		default:
 			break;
