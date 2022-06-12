@@ -12,7 +12,7 @@
 
 %%
 
-func										{ return T_FUNC; }
+func										{ yylval.yy_int = T_FUNC;return T_FUNC; }
 return										{ return T_RETURN; }
 while										{ return T_WHILE; }
 var											{ return T_VAR; }
@@ -49,9 +49,9 @@ else										{ return T_ELSE; }
 !											{ yylval.yy_int = T_NOT;return T_NOT; }
 \|\|										{ yylval.yy_int = T_OR;return T_OR; }
 ;											{ return T_SEMICOLON; }
-\"([^\n"\\]|\\(a|b|t|n|v|f|r|\\|\'|\"))*\"	{ return T_STRINGCONSTANT; }
+\"([^\n"\\]|\\(a|b|t|n|v|f|r|\\|\'|\"))*\"	{ yylval.yy_str = strdup(yytext);return T_STRINGCONSTANT; }
 [0-9]+(\.[0-9]+)?							{ yylval.yy_str = strdup(yytext);return T_INTCONSTANT; }
-0[xX][0-9A-Fa-f]+							{ return T_HEXCONSTANT; }
+0[xX][0-9A-Fa-f]+							{ yylval.yy_str = strdup(yytext);return T_HEXCONSTANT; }
 \'([^\n'\\]|\\(a|b|t|n|v|f|r|\\|\'|\"))\'	{ yylval.yy_str = strdup(yytext);return T_CHARCONSTANT; }
 \{											{ return T_LCB; }
 \}											{ return T_RCB; }

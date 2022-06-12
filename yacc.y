@@ -20,18 +20,20 @@
 		int intValue;
 		bool boolValue;
 		char stringValue[MAXSIZE];
+		int returnType;
+		char param[100];
 		int passing; // value or reference
 	}symbol;
 	
 	int symbol_count = 0;
 	symbol symbols[MAXSIZE];
 	int searchSymbol(char *name);
-	void createSymbol(char *name, int type, char* value);
+	void createSymbol(char *name, int type, int returnType, char *value, char* param);
 	void updateSymbol(char *name, char *value);
 	void printSymbols();
 	
 	// function
-	const char* binaryCompute(char *a_name, int operator, char *b_name);
+	char* binaryCompute(char *a_name, int operator, char *b_name);
 	char computeResult[20];
 
 %}
@@ -41,7 +43,7 @@
 	char *yy_str;
 	int yy_int;
 }
-%type <yy_int> type binaryOperators mathOperator compareOperator;
+%type <yy_int> type methodType externType binaryOperators mathOperator compareOperator;
 %type <yy_str> constant;
 
 
@@ -51,7 +53,8 @@
 // compare & operator
 %token <yy_int> T_EQ T_NEQ T_GEQ T_GT T_LEQ T_LT T_PLUS T_MINUS T_MULT T_DIV T_MOD T_NOT T_OR T_AND T_ASSIGN 
 // function
-%token T_FUNC T_RETURN T_WHILE T_IF T_ELSE T_FOR T_BREAK T_CONTINUE
+%token <yy_int> T_FUNC
+%token T_RETURN T_WHILE T_IF T_ELSE T_FOR T_BREAK T_CONTINUE
 // sign
 %token T_COMMA T_LSB T_RSB T_SEMICOLON T_LCB T_RCB T_LPAREN T_RPAREN T_DOT T_LEFTSHIFT T_RIGHTSHIFT
 // other
@@ -88,7 +91,7 @@ fieldDecls: fieldDecls fieldDecl
 ;
 fieldDecl: T_VAR ids type T_SEMICOLON
 	| T_VAR ids arrayType T_SEMICOLON
-	| T_VAR T_ID type T_ASSIGN constant T_SEMICOLON	{ createSymbol($2, $3, $5); }
+	| T_VAR T_ID type T_ASSIGN constant T_SEMICOLON	{ createSymbol($2, $3, T_VOID, $5, ""); }
 ;
 
 // method
@@ -97,7 +100,7 @@ methodDecls: methodDecls methodDecl
 	|
 ;
 methodDecl: T_FUNC T_ID T_LPAREN idTypes T_RPAREN methodType block
-	| T_FUNC T_ID T_LPAREN T_RPAREN methodType block
+	| T_FUNC T_ID T_LPAREN T_RPAREN methodType block	{ createSymbol($2, $1, $5, "0", ""); }
 ;
 methodCall: T_ID T_LPAREN methodArgs T_RPAREN
 	| T_ID T_LPAREN T_RPAREN
@@ -114,7 +117,7 @@ varDecls: varDecls varDecl
 	| varDecl
 	|
 ;
-varDecl: T_VAR ids type T_SEMICOLON	{createSymbol($<yy_str>2, $3, "0");}
+varDecl: T_VAR ids type T_SEMICOLON	{createSymbol($<yy_str>2, $3, T_VOID, "0", "");}
 ;
 
 // statements & expressions
@@ -183,14 +186,14 @@ ids: ids T_COMMA T_ID
 idTypes: idTypes T_COMMA idTypes
 	| T_ID type
 ;
-type: T_INTTYPE
-	| T_BOOLTYPE
+type: T_INTTYPE				{$$ = $1;}
+	| T_BOOLTYPE			{$$ = $1;}
 ;
-externType: T_STRINGTYPE
-	| type
+externType: T_STRINGTYPE	{$$ = $1;}
+	| type					{$$ = $1;}
 ;
-methodType: T_VOID
-	| type
+methodType: T_VOID			{$$ = $1;}
+	| type					{$$ = $1;}
 ;
 arrayType: T_LSB T_INTCONSTANT T_RSB type ;
 constant: T_INTCONSTANT	{$$ = $1;}
@@ -227,7 +230,7 @@ int searchSymbol(char *name){
 }
 
 // store variable
-void createSymbol(char *name, int type, char *value){
+void createSymbol(char *name, int type, int returnType, char *value, char* param){
 	int check = searchSymbol(name);
 	if(check != -1){
 		char error[] = "The name \"";
@@ -250,6 +253,11 @@ void createSymbol(char *name, int type, char *value){
 		case T_BOOLTYPE:
 			symbols[symbol_count].type = T_BOOLTYPE;
 			symbols[symbol_count].intValue = atoi(value);
+			break;
+		case T_FUNC:
+			symbols[symbol_count].type = T_FUNC;
+			symbols[symbol_count].returnType = returnType;
+			strcpy(symbols[symbol_count].param, param);
 			break;
 		default:
 			break;
@@ -287,16 +295,23 @@ void updateSymbol(char *name, char *value){
 void printSymbols(){
 	for(int i=0;i<symbol_count;i++){
 		printf("symbol name:%s\t", symbols[i].name);
-		printf("symbol type:%d\t", symbols[i].type);
 		switch(symbols[i].type){
 			case T_INTTYPE:
+				printf("symbol type:int\t\t");
 				printf("symbol value:%d\n", symbols[i].intValue);
 				break;
 			case T_STRINGTYPE:
+				printf("symbol type:string\t");
 				printf("symbol value:%s\n", symbols[i].stringValue);
 				break;
 			case T_BOOLTYPE:
+				printf("symbol type:bool\t");
 				printf("symbol value:%s\n", symbols[i].intValue? "true" : "false");
+				break;
+			case T_FUNC:
+				printf("symbol type:function\t");
+				printf("symbol return type:%d\t", symbols[i].returnType);
+				printf("symbol param:%s\n", symbols[i].param);
 				break;
 			default:
 				printf("unexpected type\n");
@@ -307,7 +322,7 @@ void printSymbols(){
 }
 
 // math compute
-const char* binaryCompute(char *a_name, int operator, char *b_name){
+char* binaryCompute(char *a_name, int operator, char *b_name){
 	int index;
 	symbol a, b;
 	// handle a, if a is name then search symbol , if not then assign value

@@ -861,7 +861,7 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 YY_RULE_SETUP
 #line 15 "lex.l"
-{ return T_FUNC; }
+{ yylval.yy_int = T_FUNC;return T_FUNC; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
@@ -1046,7 +1046,7 @@ YY_RULE_SETUP
 case 38:
 YY_RULE_SETUP
 #line 52 "lex.l"
-{ return T_STRINGCONSTANT; }
+{ yylval.yy_str = strdup(yytext);return T_STRINGCONSTANT; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
@@ -1056,7 +1056,7 @@ YY_RULE_SETUP
 case 40:
 YY_RULE_SETUP
 #line 54 "lex.l"
-{ return T_HEXCONSTANT; }
+{ yylval.yy_str = strdup(yytext);return T_HEXCONSTANT; }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP

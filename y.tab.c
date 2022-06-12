@@ -89,22 +89,24 @@
 		int intValue;
 		bool boolValue;
 		char stringValue[MAXSIZE];
+		int returnType;
+		char param[100];
 		int passing; // value or reference
 	}symbol;
 	
 	int symbol_count = 0;
 	symbol symbols[MAXSIZE];
 	int searchSymbol(char *name);
-	void createSymbol(char *name, int type, char* value);
+	void createSymbol(char *name, int type, int returnType, char *value, char* param);
 	void updateSymbol(char *name, char *value);
 	void printSymbols();
 	
 	// function
-	const char* binaryCompute(char *a_name, int operator, char *b_name);
+	char* binaryCompute(char *a_name, int operator, char *b_name);
 	char computeResult[20];
 
 
-#line 108 "y.tab.c"
+#line 110 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -264,12 +266,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 40 "yacc.y"
+#line 42 "yacc.y"
 
 	char *yy_str;
 	int yy_int;
 
-#line 273 "y.tab.c"
+#line 275 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -649,15 +651,15 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    72,    72,    75,    76,    77,    79,    80,    81,    85,
-      86,    87,    89,    90,    91,    95,    96,    97,    99,   100,
-     102,   103,   105,   106,   108,   109,   113,   114,   115,   117,
-     121,   122,   123,   124,   126,   127,   128,   129,   130,   131,
-     132,   133,   134,   135,   136,   138,   139,   140,   141,   142,
-     143,   144,   147,   148,   150,   152,   153,   157,   158,   160,
-     161,   163,   164,   165,   166,   167,   169,   170,   171,   172,
-     173,   174,   175,   176,   180,   181,   183,   184,   186,   187,
-     189,   190,   192,   193,   195,   196,   197,   198,   199,   200
+       0,    75,    75,    78,    79,    80,    82,    83,    84,    88,
+      89,    90,    92,    93,    94,    98,    99,   100,   102,   103,
+     105,   106,   108,   109,   111,   112,   116,   117,   118,   120,
+     124,   125,   126,   127,   129,   130,   131,   132,   133,   134,
+     135,   136,   137,   138,   139,   141,   142,   143,   144,   145,
+     146,   147,   150,   151,   153,   155,   156,   160,   161,   163,
+     164,   166,   167,   168,   169,   170,   172,   173,   174,   175,
+     176,   177,   178,   179,   183,   184,   186,   187,   189,   190,
+     192,   193,   195,   196,   198,   199,   200,   201,   202,   203
 };
 #endif
 
@@ -1586,85 +1588,127 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 72 "yacc.y"
+#line 75 "yacc.y"
                                                                         {printSymbols();}
-#line 1592 "y.tab.c"
+#line 1594 "y.tab.c"
     break;
 
   case 14:
-#line 91 "yacc.y"
-                                                        { createSymbol((yyvsp[-4].yy_str), (yyvsp[-3].yy_int), (yyvsp[-1].yy_str)); }
-#line 1598 "y.tab.c"
+#line 94 "yacc.y"
+                                                        { createSymbol((yyvsp[-4].yy_str), (yyvsp[-3].yy_int), T_VOID, (yyvsp[-1].yy_str), ""); }
+#line 1600 "y.tab.c"
+    break;
+
+  case 19:
+#line 103 "yacc.y"
+                                                                { createSymbol((yyvsp[-4].yy_str), (yyvsp[-5].yy_int), (yyvsp[-1].yy_int), "0", ""); }
+#line 1606 "y.tab.c"
     break;
 
   case 29:
-#line 117 "yacc.y"
-                                        {createSymbol((yyvsp[-2].yy_str), (yyvsp[-1].yy_int), "0");}
-#line 1604 "y.tab.c"
+#line 120 "yacc.y"
+                                        {createSymbol((yyvsp[-2].yy_str), (yyvsp[-1].yy_int), T_VOID, "0", "");}
+#line 1612 "y.tab.c"
     break;
 
   case 47:
-#line 140 "yacc.y"
+#line 143 "yacc.y"
                         {(yyval.yy_str) = (yyvsp[0].yy_str);}
-#line 1610 "y.tab.c"
+#line 1618 "y.tab.c"
     break;
 
   case 48:
-#line 141 "yacc.y"
+#line 144 "yacc.y"
                                         { (yyval.yy_str) = binaryCompute((yyvsp[-2].yy_str), (yyvsp[-1].yy_int), (yyvsp[0].yy_str));}
-#line 1616 "y.tab.c"
+#line 1624 "y.tab.c"
     break;
 
   case 54:
-#line 150 "yacc.y"
+#line 153 "yacc.y"
                                 {updateSymbol((yyvsp[-2].yy_str), (yyvsp[0].yy_str));}
-#line 1622 "y.tab.c"
+#line 1630 "y.tab.c"
     break;
 
   case 55:
-#line 152 "yacc.y"
+#line 155 "yacc.y"
                 {(yyval.yy_str) = (yyvsp[0].yy_str);}
-#line 1628 "y.tab.c"
+#line 1636 "y.tab.c"
     break;
 
   case 75:
-#line 181 "yacc.y"
+#line 184 "yacc.y"
                 {(yyval.yy_str) = (yyvsp[0].yy_str);}
-#line 1634 "y.tab.c"
+#line 1642 "y.tab.c"
+    break;
+
+  case 78:
+#line 189 "yacc.y"
+                                        {(yyval.yy_int) = (yyvsp[0].yy_int);}
+#line 1648 "y.tab.c"
+    break;
+
+  case 79:
+#line 190 "yacc.y"
+                                        {(yyval.yy_int) = (yyvsp[0].yy_int);}
+#line 1654 "y.tab.c"
+    break;
+
+  case 80:
+#line 192 "yacc.y"
+                                {(yyval.yy_int) = (yyvsp[0].yy_int);}
+#line 1660 "y.tab.c"
+    break;
+
+  case 81:
+#line 193 "yacc.y"
+                                                {(yyval.yy_int) = (yyvsp[0].yy_int);}
+#line 1666 "y.tab.c"
+    break;
+
+  case 82:
+#line 195 "yacc.y"
+                                        {(yyval.yy_int) = (yyvsp[0].yy_int);}
+#line 1672 "y.tab.c"
+    break;
+
+  case 83:
+#line 196 "yacc.y"
+                                                {(yyval.yy_int) = (yyvsp[0].yy_int);}
+#line 1678 "y.tab.c"
     break;
 
   case 85:
-#line 196 "yacc.y"
+#line 199 "yacc.y"
                         {(yyval.yy_str) = (yyvsp[0].yy_str);}
-#line 1640 "y.tab.c"
+#line 1684 "y.tab.c"
     break;
 
   case 86:
-#line 197 "yacc.y"
+#line 200 "yacc.y"
                                 {(yyval.yy_str) = (yyvsp[0].yy_str);}
-#line 1646 "y.tab.c"
+#line 1690 "y.tab.c"
     break;
 
   case 87:
-#line 198 "yacc.y"
+#line 201 "yacc.y"
                                 {(yyval.yy_str) = (yyvsp[0].yy_str);}
-#line 1652 "y.tab.c"
+#line 1696 "y.tab.c"
     break;
 
   case 88:
-#line 199 "yacc.y"
+#line 202 "yacc.y"
                                         {(yyval.yy_str) = "1";}
-#line 1658 "y.tab.c"
+#line 1702 "y.tab.c"
     break;
 
   case 89:
-#line 200 "yacc.y"
+#line 203 "yacc.y"
                                         {(yyval.yy_str) = "0";}
-#line 1664 "y.tab.c"
+#line 1708 "y.tab.c"
     break;
 
 
-#line 1668 "y.tab.c"
+#line 1712 "y.tab.c"
 
       default: break;
     }
@@ -1896,7 +1940,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 204 "yacc.y"
+#line 207 "yacc.y"
 
 
 int main(void) {
@@ -1923,7 +1967,7 @@ int searchSymbol(char *name){
 }
 
 // store variable
-void createSymbol(char *name, int type, char *value){
+void createSymbol(char *name, int type, int returnType, char *value, char* param){
 	int check = searchSymbol(name);
 	if(check != -1){
 		char error[] = "The name \"";
@@ -1946,6 +1990,11 @@ void createSymbol(char *name, int type, char *value){
 		case T_BOOLTYPE:
 			symbols[symbol_count].type = T_BOOLTYPE;
 			symbols[symbol_count].intValue = atoi(value);
+			break;
+		case T_FUNC:
+			symbols[symbol_count].type = T_FUNC;
+			symbols[symbol_count].returnType = returnType;
+			strcpy(symbols[symbol_count].param, param);
 			break;
 		default:
 			break;
@@ -1983,16 +2032,23 @@ void updateSymbol(char *name, char *value){
 void printSymbols(){
 	for(int i=0;i<symbol_count;i++){
 		printf("symbol name:%s\t", symbols[i].name);
-		printf("symbol type:%d\t", symbols[i].type);
 		switch(symbols[i].type){
 			case T_INTTYPE:
+				printf("symbol type:int\t\t");
 				printf("symbol value:%d\n", symbols[i].intValue);
 				break;
 			case T_STRINGTYPE:
+				printf("symbol type:string\t");
 				printf("symbol value:%s\n", symbols[i].stringValue);
 				break;
 			case T_BOOLTYPE:
+				printf("symbol type:bool\t");
 				printf("symbol value:%s\n", symbols[i].intValue? "true" : "false");
+				break;
+			case T_FUNC:
+				printf("symbol type:function\t");
+				printf("symbol return type:%d\t", symbols[i].returnType);
+				printf("symbol param:%s\n", symbols[i].param);
 				break;
 			default:
 				printf("unexpected type\n");
@@ -2003,7 +2059,7 @@ void printSymbols(){
 }
 
 // math compute
-const char* binaryCompute(char *a_name, int operator, char *b_name){
+char* binaryCompute(char *a_name, int operator, char *b_name){
 	int index;
 	symbol a, b;
 	// handle a, if a is name then search symbol , if not then assign value
