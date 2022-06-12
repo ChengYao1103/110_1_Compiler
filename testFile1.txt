@@ -7,10 +7,11 @@ package helloParser {
 	var myVariable int = 100;
 	var x, y bool;
 	func main(param1 bool, param2 int) int {
-		var c, d, e int;
+		var c, d, e, f int;
 		c = a;
 		d = a-b;
 		e = 25*10+2;
+		f = 25+10*2;
 		myVariable = myVariable % 3;
 		x = true;
 		y = false;
