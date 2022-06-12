@@ -35,12 +35,18 @@
 	// function
 	char* binaryCompute(char *a_name, int operator, char *b_name);
 	char computeResult[20];
+	
+	char declaredSymbol[10][100];
+	int declaredIndex = 0;
+	char** addList(char *name);
+	
 
 %}
 
 // struct
 %union{
 	char *yy_str;
+	char **yy_strList;
 	int yy_int;
 }
 %type <yy_int> type methodType externType binaryOperators mathOperator compareOperator;
@@ -99,7 +105,7 @@ methodDecls: methodDecls methodDecl
 	| methodDecl
 	|
 ;
-methodDecl: T_FUNC T_ID T_LPAREN idTypes T_RPAREN methodType block
+methodDecl: T_FUNC T_ID T_LPAREN idTypes T_RPAREN methodType block	{ createSymbol($2, $1, $6, "0", ""); }
 	| T_FUNC T_ID T_LPAREN T_RPAREN methodType block	{ createSymbol($2, $1, $5, "0", ""); }
 ;
 methodCall: T_ID T_LPAREN methodArgs T_RPAREN
@@ -117,7 +123,12 @@ varDecls: varDecls varDecl
 	| varDecl
 	|
 ;
-varDecl: T_VAR ids type T_SEMICOLON	{createSymbol($<yy_str>2, $3, T_VOID, "0", "");}
+varDecl: T_VAR ids type T_SEMICOLON	{
+	for(int i=0;i<declaredIndex;i++){
+		createSymbol(declaredSymbol[i], $3, T_VOID, "0", "");
+	}
+	declaredIndex = 0;
+}
 ;
 
 // statements & expressions
@@ -180,8 +191,8 @@ compareOperator: T_GEQ
 ;
 
 // id & types
-ids: ids T_COMMA T_ID
-	| T_ID	{$<yy_str>$ = $1;}
+ids: ids T_COMMA T_ID	{$<yy_strList>$ = addList($3);}
+	| T_ID	{$<yy_strList>$ = addList($1);}
 ;
 idTypes: idTypes T_COMMA idTypes
 	| T_ID type
@@ -319,6 +330,13 @@ void printSymbols(){
 		}
 	}
 	printf("\n");
+}
+
+// handle multiple declare
+char** addList(char *name){
+	strcpy(declaredSymbol[declaredIndex], name);
+	declaredIndex += 1;
+	return (char**)declaredSymbol;
 }
 
 // math compute

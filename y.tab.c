@@ -104,9 +104,14 @@
 	// function
 	char* binaryCompute(char *a_name, int operator, char *b_name);
 	char computeResult[20];
+	
+	char declaredSymbol[10][100];
+	int declaredIndex = 0;
+	char** addList(char *name);
+	
 
 
-#line 110 "y.tab.c"
+#line 115 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -266,12 +271,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 42 "yacc.y"
+#line 47 "yacc.y"
 
 	char *yy_str;
+	char **yy_strList;
 	int yy_int;
 
-#line 275 "y.tab.c"
+#line 281 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -651,15 +657,15 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    75,    75,    78,    79,    80,    82,    83,    84,    88,
-      89,    90,    92,    93,    94,    98,    99,   100,   102,   103,
-     105,   106,   108,   109,   111,   112,   116,   117,   118,   120,
-     124,   125,   126,   127,   129,   130,   131,   132,   133,   134,
-     135,   136,   137,   138,   139,   141,   142,   143,   144,   145,
-     146,   147,   150,   151,   153,   155,   156,   160,   161,   163,
-     164,   166,   167,   168,   169,   170,   172,   173,   174,   175,
-     176,   177,   178,   179,   183,   184,   186,   187,   189,   190,
-     192,   193,   195,   196,   198,   199,   200,   201,   202,   203
+       0,    81,    81,    84,    85,    86,    88,    89,    90,    94,
+      95,    96,    98,    99,   100,   104,   105,   106,   108,   109,
+     111,   112,   114,   115,   117,   118,   122,   123,   124,   126,
+     135,   136,   137,   138,   140,   141,   142,   143,   144,   145,
+     146,   147,   148,   149,   150,   152,   153,   154,   155,   156,
+     157,   158,   161,   162,   164,   166,   167,   171,   172,   174,
+     175,   177,   178,   179,   180,   181,   183,   184,   185,   186,
+     187,   188,   189,   190,   194,   195,   197,   198,   200,   201,
+     203,   204,   206,   207,   209,   210,   211,   212,   213,   214
 };
 #endif
 
@@ -1588,127 +1594,144 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 75 "yacc.y"
+#line 81 "yacc.y"
                                                                         {printSymbols();}
-#line 1594 "y.tab.c"
-    break;
-
-  case 14:
-#line 94 "yacc.y"
-                                                        { createSymbol((yyvsp[-4].yy_str), (yyvsp[-3].yy_int), T_VOID, (yyvsp[-1].yy_str), ""); }
 #line 1600 "y.tab.c"
     break;
 
-  case 19:
-#line 103 "yacc.y"
-                                                                { createSymbol((yyvsp[-4].yy_str), (yyvsp[-5].yy_int), (yyvsp[-1].yy_int), "0", ""); }
+  case 14:
+#line 100 "yacc.y"
+                                                        { createSymbol((yyvsp[-4].yy_str), (yyvsp[-3].yy_int), T_VOID, (yyvsp[-1].yy_str), ""); }
 #line 1606 "y.tab.c"
     break;
 
-  case 29:
-#line 120 "yacc.y"
-                                        {createSymbol((yyvsp[-2].yy_str), (yyvsp[-1].yy_int), T_VOID, "0", "");}
+  case 18:
+#line 108 "yacc.y"
+                                                                        { createSymbol((yyvsp[-5].yy_str), (yyvsp[-6].yy_int), (yyvsp[-1].yy_int), "0", ""); }
 #line 1612 "y.tab.c"
     break;
 
-  case 47:
-#line 143 "yacc.y"
-                        {(yyval.yy_str) = (yyvsp[0].yy_str);}
+  case 19:
+#line 109 "yacc.y"
+                                                                { createSymbol((yyvsp[-4].yy_str), (yyvsp[-5].yy_int), (yyvsp[-1].yy_int), "0", ""); }
 #line 1618 "y.tab.c"
     break;
 
+  case 29:
+#line 126 "yacc.y"
+                                        {
+	for(int i=0;i<declaredIndex;i++){
+		createSymbol(declaredSymbol[i], (yyvsp[-1].yy_int), T_VOID, "0", "");
+	}
+	declaredIndex = 0;
+}
+#line 1629 "y.tab.c"
+    break;
+
+  case 47:
+#line 154 "yacc.y"
+                        {(yyval.yy_str) = (yyvsp[0].yy_str);}
+#line 1635 "y.tab.c"
+    break;
+
   case 48:
-#line 144 "yacc.y"
+#line 155 "yacc.y"
                                         { (yyval.yy_str) = binaryCompute((yyvsp[-2].yy_str), (yyvsp[-1].yy_int), (yyvsp[0].yy_str));}
-#line 1624 "y.tab.c"
+#line 1641 "y.tab.c"
     break;
 
   case 54:
-#line 153 "yacc.y"
+#line 164 "yacc.y"
                                 {updateSymbol((yyvsp[-2].yy_str), (yyvsp[0].yy_str));}
-#line 1630 "y.tab.c"
+#line 1647 "y.tab.c"
     break;
 
   case 55:
-#line 155 "yacc.y"
+#line 166 "yacc.y"
                 {(yyval.yy_str) = (yyvsp[0].yy_str);}
-#line 1636 "y.tab.c"
+#line 1653 "y.tab.c"
+    break;
+
+  case 74:
+#line 194 "yacc.y"
+                        {(yyval.yy_strList) = addList((yyvsp[0].yy_str));}
+#line 1659 "y.tab.c"
     break;
 
   case 75:
-#line 184 "yacc.y"
-                {(yyval.yy_str) = (yyvsp[0].yy_str);}
-#line 1642 "y.tab.c"
+#line 195 "yacc.y"
+                {(yyval.yy_strList) = addList((yyvsp[0].yy_str));}
+#line 1665 "y.tab.c"
     break;
 
   case 78:
-#line 189 "yacc.y"
+#line 200 "yacc.y"
                                         {(yyval.yy_int) = (yyvsp[0].yy_int);}
-#line 1648 "y.tab.c"
+#line 1671 "y.tab.c"
     break;
 
   case 79:
-#line 190 "yacc.y"
+#line 201 "yacc.y"
                                         {(yyval.yy_int) = (yyvsp[0].yy_int);}
-#line 1654 "y.tab.c"
+#line 1677 "y.tab.c"
     break;
 
   case 80:
-#line 192 "yacc.y"
+#line 203 "yacc.y"
                                 {(yyval.yy_int) = (yyvsp[0].yy_int);}
-#line 1660 "y.tab.c"
+#line 1683 "y.tab.c"
     break;
 
   case 81:
-#line 193 "yacc.y"
+#line 204 "yacc.y"
                                                 {(yyval.yy_int) = (yyvsp[0].yy_int);}
-#line 1666 "y.tab.c"
+#line 1689 "y.tab.c"
     break;
 
   case 82:
-#line 195 "yacc.y"
+#line 206 "yacc.y"
                                         {(yyval.yy_int) = (yyvsp[0].yy_int);}
-#line 1672 "y.tab.c"
+#line 1695 "y.tab.c"
     break;
 
   case 83:
-#line 196 "yacc.y"
+#line 207 "yacc.y"
                                                 {(yyval.yy_int) = (yyvsp[0].yy_int);}
-#line 1678 "y.tab.c"
+#line 1701 "y.tab.c"
     break;
 
   case 85:
-#line 199 "yacc.y"
+#line 210 "yacc.y"
                         {(yyval.yy_str) = (yyvsp[0].yy_str);}
-#line 1684 "y.tab.c"
+#line 1707 "y.tab.c"
     break;
 
   case 86:
-#line 200 "yacc.y"
+#line 211 "yacc.y"
                                 {(yyval.yy_str) = (yyvsp[0].yy_str);}
-#line 1690 "y.tab.c"
+#line 1713 "y.tab.c"
     break;
 
   case 87:
-#line 201 "yacc.y"
+#line 212 "yacc.y"
                                 {(yyval.yy_str) = (yyvsp[0].yy_str);}
-#line 1696 "y.tab.c"
+#line 1719 "y.tab.c"
     break;
 
   case 88:
-#line 202 "yacc.y"
+#line 213 "yacc.y"
                                         {(yyval.yy_str) = "1";}
-#line 1702 "y.tab.c"
+#line 1725 "y.tab.c"
     break;
 
   case 89:
-#line 203 "yacc.y"
+#line 214 "yacc.y"
                                         {(yyval.yy_str) = "0";}
-#line 1708 "y.tab.c"
+#line 1731 "y.tab.c"
     break;
 
 
-#line 1712 "y.tab.c"
+#line 1735 "y.tab.c"
 
       default: break;
     }
@@ -1940,7 +1963,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 207 "yacc.y"
+#line 218 "yacc.y"
 
 
 int main(void) {
@@ -2056,6 +2079,13 @@ void printSymbols(){
 		}
 	}
 	printf("\n");
+}
+
+// handle multiple declare
+char** addList(char *name){
+	strcpy(declaredSymbol[declaredIndex], name);
+	declaredIndex += 1;
+	return (char**)declaredSymbol;
 }
 
 // math compute

@@ -161,12 +161,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 42 "yacc.y"
+#line 47 "yacc.y"
 
 	char *yy_str;
+	char **yy_strList;
 	int yy_int;
 
-#line 170 "y.tab.h"
+#line 171 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
