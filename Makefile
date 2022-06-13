@@ -1,10 +1,10 @@
 build: parser
 .PHONY: clean
 
-parser: lex.yy.c
+parser: lex.yy.c y.tab.c
 	gcc -o parser lex.yy.c y.tab.c
 
-lex.yy.c: lex.l y.tab.c
+lex.yy.c: lex.l
 	lex lex.l
 
 y.tab.c: yacc.y

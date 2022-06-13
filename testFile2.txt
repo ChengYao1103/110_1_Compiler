@@ -3,13 +3,15 @@ extern func print_int(int) void;
 package GreatestCommonDivisor {
     var a int = 10;
     var b int = 20;
-    var c, d, e bool;
+    var c bool = true;
 
     func main() int {
         var x, y, z int;
         x = a;
         y = b;
         z = 0;
+        x = 31;
+        c = false;
         print_int(z);
     }
 }

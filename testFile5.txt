@@ -1,7 +1,7 @@
 extern func test(bool) void;
 
 package helloParser {
+	// multiple declared a
 	var a int = 10;
 	var a int = 5;
-	}
 }

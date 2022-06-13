@@ -27,18 +27,18 @@
 	
 	int symbol_count = 0;
 	symbol symbols[MAXSIZE];
-	int searchSymbol(char *name);
-	void createSymbol(char *name, int type, int returnType, char *value, char* param);
-	void updateSymbol(char *name, char *value);
-	void printSymbols();
+	int searchSymbol(char *name);	// search element in symbol table return index
+	void createSymbol(char *name, int type, int returnType, char *value, char* param);	// save symbol to symbol table
+	void updateSymbol(char *name, char *value);	// update value of symbol
+	void printSymbols();	// print symbol table
 	
 	// function
-	char* binaryCompute(char *a_name, int operator, char *b_name);
-	char computeResult[20];
+	char* binaryCompute(char *a_name, int operator, char *b_name);	// math compute
+	char computeResult[20];	// save compute result with char*
 	
-	char declaredSymbol[10][100];
-	int declaredIndex = 0;
-	char** addList(char *name);
+	char declaredSymbol[10][100];	// handle declared multiple variable at once
+	int declaredIndex = 0;	// record amount of multiple declared
+	char** addList(char *name);	// save variable name to list
 	
 
 %}
@@ -79,7 +79,7 @@
 
 /* --------grammar-------- */
 
-program: externs T_PACKAGE T_ID T_LCB fieldDecls methodDecls T_RCB	{printSymbols();};
+program: externs T_PACKAGE T_ID T_LCB fieldDecls methodDecls T_RCB
 
 // extern
 externs: externs externDef
@@ -112,10 +112,6 @@ methodDecls: methodDecls methodDecl
 	|
 ;
 methodDecl: T_FUNC T_ID T_LPAREN idTypes T_RPAREN methodType block	{
-	/*for(int i=0;i<declaredIndex;i++){
-		createSymbol($2, $1, $6, "", declaredSymbol[i]);
-	}
-	declaredIndex = 0;*/
 	createSymbol($2, $1, $6, "", "");
 }
 	| T_FUNC T_ID T_LPAREN T_RPAREN methodType block	{ createSymbol($2, $1, $5, "0", ""); }
@@ -161,7 +157,7 @@ stat: block
 	| T_BREAK T_SEMICOLON
 	| T_CONTINUE T_SEMICOLON
 ;
-expr: T_ID
+expr: T_ID	{$<yy_str>$ = $1;}
 	| methodCall
 	| constant	{$<yy_str>$ = $1;}
 	| expr binaryOperators expr	{ $<yy_str>$ = binaryCompute($<yy_str>1, $2, $<yy_str>3);}
@@ -232,6 +228,7 @@ constant: T_INTCONSTANT	{$$ = $1;}
 int main(void) {
     yyparse();
     if(!is_error){
+    	printSymbols();
     	printf("syntax all correct!\n");
     }
     return 0;
@@ -252,7 +249,7 @@ int searchSymbol(char *name){
 	return -1;
 }
 
-// store variable
+// save symbol to symbol table
 void createSymbol(char *name, int type, int returnType, char *value, char* param){
 	int check = searchSymbol(name);
 	if(check != -1){
@@ -289,9 +286,8 @@ void createSymbol(char *name, int type, int returnType, char *value, char* param
 }
 
 // update value of symbol
-
 void updateSymbol(char *name, char *value){
-	int index = searchSymbol(name), index2 = searchSymbol(value);
+	int index = searchSymbol(name), index2;
 	if(index == -1){
 		char error[] = "The name \"";
 		strcat(error, name);
@@ -299,7 +295,16 @@ void updateSymbol(char *name, char *value){
 		yyerror(error);
 		exit(1);
 	}
-	if(index2 != -1){
+	// if value is the name of a variable
+	if(atoi(value) == 0 && strcmp(value, "0") != 0){
+		index2 = searchSymbol(value);
+		if(index2 == -1){
+			char error[] = "The name \"";
+			strcat(error, value);
+			strcat(error, "\" doesn't exist");
+			yyerror(error);
+			exit(1);
+		}
 		switch(symbols[index2].type){
 			case T_INTTYPE:
 				sprintf(value, "%d", symbols[index2].intValue);
@@ -311,13 +316,6 @@ void updateSymbol(char *name, char *value){
 				sprintf(value, "%d", symbols[index2].intValue);
 				break;
 		}
-	}
-	else if(index2 == -1 && strcmp(value, "0") != 0 && atoi(value) == 0){
-		char error[] = "The name \"";
-		strcat(error, value);
-		strcat(error, "\" doesn't exist");
-		yyerror(error);
-		exit(1);
 	}
 	char tmpParam[100];
 	switch(symbols[index].type){

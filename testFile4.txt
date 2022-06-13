@@ -3,6 +3,7 @@ extern func test(bool) void;
 package helloParser {
 	var a int = 10;
 	func main(param1 bool, param2 int) int {
+		// c is undefined
 		c = a;
 	}
 }

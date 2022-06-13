@@ -5,10 +5,7 @@
 	#include "y.tab.h"
 	int line = 1;
 	extern void yyset_lineno(int lineno);
-	// track line number %option yylineno
 %}
-
-%option yylineno
 
 %%
 
@@ -20,8 +17,8 @@ void										{ yylval.yy_int = T_VOID;return T_VOID; }
 bool										{ yylval.yy_int = T_BOOLTYPE;return T_BOOLTYPE; }
 int											{ yylval.yy_int = T_INTTYPE;return T_INTTYPE; }
 string										{ yylval.yy_int = T_STRINGTYPE;return T_STRINGTYPE; }
-true										{ yylval.yy_int = T_TRUE;return T_TRUE; }
-false										{ yylval.yy_int = T_FALSE;return T_FALSE; }
+true										{ return T_TRUE; }
+false										{ return T_FALSE; }
 null										{ return T_NULL; }
 if											{ return T_IF; }
 extern										{ return T_EXTERN; }
@@ -58,7 +55,7 @@ else										{ return T_ELSE; }
 \(											{ return T_LPAREN; }
 \)											{ return T_RPAREN; }
 [a-zA-Z\_][a-zA-Z\_0-9]*					{ yylval.yy_str = strdup(yytext);return T_ID; }
-"//".*"\n"									{ line++;yyset_lineno(line); }	// if return something will occur error
+"//"[^\n]*									{  }	// if return something will occur error
 \n											{ line++;yyset_lineno(line);}
 [\t\r\a\v\b ]+								{  }	
 &&											{ return T_AND; }

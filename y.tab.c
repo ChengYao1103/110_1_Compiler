@@ -96,18 +96,18 @@
 	
 	int symbol_count = 0;
 	symbol symbols[MAXSIZE];
-	int searchSymbol(char *name);
-	void createSymbol(char *name, int type, int returnType, char *value, char* param);
-	void updateSymbol(char *name, char *value);
-	void printSymbols();
+	int searchSymbol(char *name);	// search element in symbol table return index
+	void createSymbol(char *name, int type, int returnType, char *value, char* param);	// save symbol to symbol table
+	void updateSymbol(char *name, char *value);	// update value of symbol
+	void printSymbols();	// print symbol table
 	
 	// function
-	char* binaryCompute(char *a_name, int operator, char *b_name);
-	char computeResult[20];
+	char* binaryCompute(char *a_name, int operator, char *b_name);	// math compute
+	char computeResult[20];	// save compute result with char*
 	
-	char declaredSymbol[10][100];
-	int declaredIndex = 0;
-	char** addList(char *name);
+	char declaredSymbol[10][100];	// handle declared multiple variable at once
+	int declaredIndex = 0;	// record amount of multiple declared
+	char** addList(char *name);	// save variable name to list
 	
 
 
@@ -658,14 +658,14 @@ static const yytype_int8 yytranslate[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    82,    82,    85,    86,    87,    89,    90,    91,    95,
-      96,    97,    99,   105,   106,   110,   111,   112,   114,   121,
-     123,   124,   126,   127,   129,   130,   134,   135,   136,   138,
-     147,   148,   149,   150,   152,   153,   154,   155,   156,   157,
-     158,   159,   160,   161,   162,   164,   165,   166,   167,   168,
-     169,   170,   173,   174,   176,   178,   179,   183,   184,   186,
-     187,   189,   190,   191,   192,   193,   195,   196,   197,   198,
-     199,   200,   201,   202,   206,   207,   209,   210,   212,   213,
-     215,   216,   218,   219,   221,   222,   223,   224,   225,   226
+      96,    97,    99,   105,   106,   110,   111,   112,   114,   117,
+     119,   120,   122,   123,   125,   126,   130,   131,   132,   134,
+     143,   144,   145,   146,   148,   149,   150,   151,   152,   153,
+     154,   155,   156,   157,   158,   160,   161,   162,   163,   164,
+     165,   166,   169,   170,   172,   174,   175,   179,   180,   182,
+     183,   185,   186,   187,   188,   189,   191,   192,   193,   194,
+     195,   196,   197,   198,   202,   203,   205,   206,   208,   209,
+     211,   212,   214,   215,   217,   218,   219,   220,   221,   222
 };
 #endif
 
@@ -1593,12 +1593,6 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-  case 2:
-#line 82 "yacc.y"
-                                                                        {printSymbols();}
-#line 1600 "y.tab.c"
-    break;
-
   case 12:
 #line 99 "yacc.y"
                                         {
@@ -1607,154 +1601,156 @@ yyreduce:
 	}
 	declaredIndex = 0;
 }
-#line 1611 "y.tab.c"
+#line 1605 "y.tab.c"
     break;
 
   case 14:
 #line 106 "yacc.y"
                                                         { createSymbol((yyvsp[-4].yy_str), (yyvsp[-3].yy_int), T_VOID, (yyvsp[-1].yy_str), ""); }
-#line 1617 "y.tab.c"
+#line 1611 "y.tab.c"
     break;
 
   case 18:
 #line 114 "yacc.y"
                                                                         {
-	/*for(int i=0;i<declaredIndex;i++){
-		createSymbol($2, $1, $6, "", declaredSymbol[i]);
-	}
-	declaredIndex = 0;*/
 	createSymbol((yyvsp[-5].yy_str), (yyvsp[-6].yy_int), (yyvsp[-1].yy_int), "", "");
 }
-#line 1629 "y.tab.c"
+#line 1619 "y.tab.c"
     break;
 
   case 19:
-#line 121 "yacc.y"
+#line 117 "yacc.y"
                                                                 { createSymbol((yyvsp[-4].yy_str), (yyvsp[-5].yy_int), (yyvsp[-1].yy_int), "0", ""); }
-#line 1635 "y.tab.c"
+#line 1625 "y.tab.c"
     break;
 
   case 29:
-#line 138 "yacc.y"
+#line 134 "yacc.y"
                                         {
 	for(int i=0;i<declaredIndex;i++){
 		createSymbol(declaredSymbol[i], (yyvsp[-1].yy_int), T_VOID, "0", "");
 	}
 	declaredIndex = 0;
 }
-#line 1646 "y.tab.c"
+#line 1636 "y.tab.c"
+    break;
+
+  case 45:
+#line 160 "yacc.y"
+                {(yyval.yy_str) = (yyvsp[0].yy_str);}
+#line 1642 "y.tab.c"
     break;
 
   case 47:
-#line 166 "yacc.y"
+#line 162 "yacc.y"
                         {(yyval.yy_str) = (yyvsp[0].yy_str);}
-#line 1652 "y.tab.c"
+#line 1648 "y.tab.c"
     break;
 
   case 48:
-#line 167 "yacc.y"
+#line 163 "yacc.y"
                                         { (yyval.yy_str) = binaryCompute((yyvsp[-2].yy_str), (yyvsp[-1].yy_int), (yyvsp[0].yy_str));}
-#line 1658 "y.tab.c"
+#line 1654 "y.tab.c"
     break;
 
   case 54:
-#line 176 "yacc.y"
+#line 172 "yacc.y"
                                 {updateSymbol((yyvsp[-2].yy_str), (yyvsp[0].yy_str));}
-#line 1664 "y.tab.c"
+#line 1660 "y.tab.c"
     break;
 
   case 55:
-#line 178 "yacc.y"
+#line 174 "yacc.y"
                 {(yyval.yy_str) = (yyvsp[0].yy_str);}
-#line 1670 "y.tab.c"
+#line 1666 "y.tab.c"
     break;
 
   case 74:
-#line 206 "yacc.y"
+#line 202 "yacc.y"
                         {(yyval.yy_strList) = addList((yyvsp[0].yy_str));}
-#line 1676 "y.tab.c"
+#line 1672 "y.tab.c"
     break;
 
   case 75:
-#line 207 "yacc.y"
+#line 203 "yacc.y"
                 {(yyval.yy_strList) = addList((yyvsp[0].yy_str));}
-#line 1682 "y.tab.c"
+#line 1678 "y.tab.c"
     break;
 
   case 77:
-#line 210 "yacc.y"
+#line 206 "yacc.y"
                         { addList((yyvsp[-1].yy_str));}
-#line 1688 "y.tab.c"
+#line 1684 "y.tab.c"
     break;
 
   case 78:
-#line 212 "yacc.y"
+#line 208 "yacc.y"
                                         {(yyval.yy_int) = (yyvsp[0].yy_int);}
-#line 1694 "y.tab.c"
+#line 1690 "y.tab.c"
     break;
 
   case 79:
-#line 213 "yacc.y"
+#line 209 "yacc.y"
                                         {(yyval.yy_int) = (yyvsp[0].yy_int);}
-#line 1700 "y.tab.c"
+#line 1696 "y.tab.c"
     break;
 
   case 80:
-#line 215 "yacc.y"
+#line 211 "yacc.y"
                                 {(yyval.yy_int) = (yyvsp[0].yy_int);}
-#line 1706 "y.tab.c"
+#line 1702 "y.tab.c"
     break;
 
   case 81:
-#line 216 "yacc.y"
+#line 212 "yacc.y"
                                                 {(yyval.yy_int) = (yyvsp[0].yy_int);}
-#line 1712 "y.tab.c"
+#line 1708 "y.tab.c"
     break;
 
   case 82:
-#line 218 "yacc.y"
+#line 214 "yacc.y"
                                         {(yyval.yy_int) = (yyvsp[0].yy_int);}
-#line 1718 "y.tab.c"
+#line 1714 "y.tab.c"
     break;
 
   case 83:
-#line 219 "yacc.y"
+#line 215 "yacc.y"
                                                 {(yyval.yy_int) = (yyvsp[0].yy_int);}
-#line 1724 "y.tab.c"
+#line 1720 "y.tab.c"
     break;
 
   case 85:
-#line 222 "yacc.y"
+#line 218 "yacc.y"
                         {(yyval.yy_str) = (yyvsp[0].yy_str);}
-#line 1730 "y.tab.c"
+#line 1726 "y.tab.c"
     break;
 
   case 86:
-#line 223 "yacc.y"
+#line 219 "yacc.y"
                                 {(yyval.yy_str) = (yyvsp[0].yy_str);}
-#line 1736 "y.tab.c"
+#line 1732 "y.tab.c"
     break;
 
   case 87:
-#line 224 "yacc.y"
+#line 220 "yacc.y"
                                 {(yyval.yy_str) = (yyvsp[0].yy_str);}
-#line 1742 "y.tab.c"
+#line 1738 "y.tab.c"
     break;
 
   case 88:
-#line 225 "yacc.y"
+#line 221 "yacc.y"
                                         {(yyval.yy_str) = "1";}
-#line 1748 "y.tab.c"
+#line 1744 "y.tab.c"
     break;
 
   case 89:
-#line 226 "yacc.y"
+#line 222 "yacc.y"
                                         {(yyval.yy_str) = "0";}
-#line 1754 "y.tab.c"
+#line 1750 "y.tab.c"
     break;
 
 
-#line 1758 "y.tab.c"
+#line 1754 "y.tab.c"
 
       default: break;
     }
@@ -1986,12 +1982,13 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 230 "yacc.y"
+#line 226 "yacc.y"
 
 
 int main(void) {
     yyparse();
     if(!is_error){
+    	printSymbols();
     	printf("syntax all correct!\n");
     }
     return 0;
@@ -2012,7 +2009,7 @@ int searchSymbol(char *name){
 	return -1;
 }
 
-// store variable
+// save symbol to symbol table
 void createSymbol(char *name, int type, int returnType, char *value, char* param){
 	int check = searchSymbol(name);
 	if(check != -1){
@@ -2049,9 +2046,8 @@ void createSymbol(char *name, int type, int returnType, char *value, char* param
 }
 
 // update value of symbol
-
 void updateSymbol(char *name, char *value){
-	int index = searchSymbol(name), index2 = searchSymbol(value);
+	int index = searchSymbol(name), index2;
 	if(index == -1){
 		char error[] = "The name \"";
 		strcat(error, name);
@@ -2059,7 +2055,16 @@ void updateSymbol(char *name, char *value){
 		yyerror(error);
 		exit(1);
 	}
-	if(index2 != -1){
+	// if value is the name of a variable
+	if(atoi(value) == 0 && strcmp(value, "0") != 0){
+		index2 = searchSymbol(value);
+		if(index2 == -1){
+			char error[] = "The name \"";
+			strcat(error, value);
+			strcat(error, "\" doesn't exist");
+			yyerror(error);
+			exit(1);
+		}
 		switch(symbols[index2].type){
 			case T_INTTYPE:
 				sprintf(value, "%d", symbols[index2].intValue);
@@ -2071,13 +2076,6 @@ void updateSymbol(char *name, char *value){
 				sprintf(value, "%d", symbols[index2].intValue);
 				break;
 		}
-	}
-	else if(index2 == -1 && strcmp(value, "0") != 0 && atoi(value) == 0){
-		char error[] = "The name \"";
-		strcat(error, value);
-		strcat(error, "\" doesn't exist");
-		yyerror(error);
-		exit(1);
 	}
 	char tmpParam[100];
 	switch(symbols[index].type){
